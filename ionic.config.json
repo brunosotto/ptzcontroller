@@ -1,0 +1,7 @@
+{
+  "name": "PtzController",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
