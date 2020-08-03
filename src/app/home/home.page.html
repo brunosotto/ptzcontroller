@@ -10,7 +10,7 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="onClick()" fill="clear">
+      <ion-button (click)="openPopover()" fill="clear">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -23,7 +23,19 @@
     <ion-row class="ion-align-items-center">
       <!-- Columa Controles Arrows -->
       <ion-col size-xs="12" size-md="4">
+       <div class="segment">
+          <ion-segment value="pizza" (ionChange)="segmentChangedCam($event)" >
+            <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
+              <ion-label>{{ cam.name }}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+         
+        </div>
+
         <div class="controlLeft">
+
+       
+
           <div class="btn-arrow-up">
             <ion-fab-button (click)="movUp()">
               <ion-icon name="arrow-up-outline"></ion-icon>
@@ -57,11 +69,11 @@
       <!-- Coluna Zoom e Focus -->
       <ion-col size-xs="12" size-md="4">
 
-        <div class="controlConfig">
+        <!-- <div class="controlConfig">
           <ion-fab-button color="danger" slot="start" (click)="openConfig()">
             <ion-icon name="options-outline"></ion-icon>
           </ion-fab-button>
-        </div>
+        </div> -->
 
         <div class="controlCenter">
 
@@ -93,6 +105,21 @@
             </ion-card>
           </div>
 
+           <div class="card-configs">
+            <ion-card class="ion-padding-vertical">
+              <ion-item lines="none">
+                <!-- <ion-fab-button slot="start" (click)="focusOpen()">
+                  <ion-icon name="contract-outline"></ion-icon>
+                </ion-fab-button> -->
+                <ion-label>Configuração</ion-label>
+                <ion-fab-button color="medium" slot="end" (click)="openConfig()">
+                  <ion-icon name="options-outline"></ion-icon>
+                </ion-fab-button>
+ 
+              </ion-item>
+            </ion-card>
+          </div>
+
         </div>
       </ion-col>
       <!-- Fim Coluna Zoom e Focus -->
@@ -100,31 +127,13 @@
       <!-- Columa Presets -->
       <ion-col size-xs="12" size-md="4" class="">
 
-        <div class="segment">
-          <ion-toolbar>
-            <ion-title>Pressets</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="onClick()">
-                <ion-icon slot="icon-only" name="add"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-          <ion-segment value="pizza" (ionChange)="segmentChanged($event)">
-            <ion-segment-button value="pizza">
-              <ion-label>CAM 01</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="pasta">
-              <ion-label>CAM 01</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-        </div>
 
         <div class="controlRight">
           <div class="btns-presets">
             <ion-grid>
               <ion-row>
                 <ion-col *ngFor="let n of btnsPresets" size="6">
-                  <ion-fab-button (click)="presetBtn(n.number)">
+                  <ion-fab-button (press)="pressEvent($event, n.number)" (click)="presetBtn(n.number)">
                     <span> {{ n.number}} </span>
                   </ion-fab-button>
                 </ion-col>
