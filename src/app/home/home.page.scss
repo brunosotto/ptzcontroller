@@ -1,0 +1,121 @@
+ ion-header {
+     ion-toolbar {
+         ion-title {
+             .content-header {
+                 display: flex;
+                 margin-bottom: 30px;
+                 margin-top: 30px;
+             }
+
+             .title {}
+
+             .segment {
+                 position: absolute;
+                 display: flex;
+                 right: 10px;
+                 padding: 10px;
+             }
+         }
+     }
+ }
+
+ ion-grid {
+     ion-row {
+
+         ion-col {
+             .controlLeft {
+                 ion-fab-button {
+                     width: 80px;
+                     height: 80px;
+                 }
+
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+
+                 .btn-arrow-up {
+                     position: absolute;
+                     top: 204px;
+                     margin: 20px;
+                 }
+
+                 .btn-arrow-down {
+                     position: absolute;
+                     top: 368px;
+                     margin: 20px;
+                 }
+
+                 .btn-arrow-left {
+                     position: absolute;
+                     left: 5px;
+                     margin: 20px;
+                     top: 290px;
+                 }
+
+                 .btn-arrow-right {
+                     position: absolute;
+                     right: 5px;
+                     margin: 20px;
+                     top: 290px;
+                 }
+             }
+
+             .controlCenter {
+                 display: flex;
+                 height: 100%;
+                 position: relative;
+                 justify-content: center;
+                .controlConfig{
+                    display: flex;
+                    position: absolute;
+                    left:  0px;
+                }
+                 .controcenter-cards {
+                     display: block;
+                     top: 200px !important;
+                     position: absolute;
+                 }
+             }
+
+             .controlRight {
+                 display: flex;
+                //  background-color: red;
+
+                 .btns-presets {
+                     position: relative;
+                     display: flex;
+                     margin: 16px auto;
+
+                     ion-grid {
+                         ion-row {
+                             ion-col {
+
+                                 ion-fab-button {
+                                     width: 70px;
+                                     height: 70px;
+                                     margin: 10px;
+
+                                     span {
+                                         font-weight: 500;
+                                         font-size: 22px;
+                                     }
+                                 }
+                             }
+
+                         }
+
+                     }
+                 }
+
+
+             }
+         }
+     }
+ }
+ .col3{
+     background: var(--ion-color-warning-tint);
+    height: 100%;
+    border-radius: 16px;
+    margin: 10px 0 auto;
+    padding: 13px;
+ }

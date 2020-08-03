@@ -1,0 +1,200 @@
+ 
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button  auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      
+    <div class="title">PTZ <strong>Controller</strong></div>
+   
+    </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-grid fixed>
+    <ion-row>
+      <!-- Columa Controles Arrows -->
+      <ion-col size="4">
+        <div class="controlLeft">
+          <div class="btn-arrow-up">
+            <ion-fab-button (click)="movUp()">
+              <ion-icon name="arrow-up-outline"></ion-icon>
+            </ion-fab-button>
+          </div>
+
+          <div class="btn-arrow-left">
+            <ion-fab-button  (click)="movLeft()">
+              <ion-icon name="arrow-back-outline"></ion-icon>
+            </ion-fab-button>
+          </div>
+
+          <div class="btn-arrow-right">
+            <ion-fab-button  (click)="movRight()">
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </ion-fab-button>
+          </div>
+
+          <div class="btn-arrow-down">
+            <ion-fab-button  (click)="movDown()">
+              <ion-icon name="arrow-down-outline"></ion-icon>
+            </ion-fab-button>
+          </div>
+
+        </div>
+      </ion-col>
+      <!-- Fim Columa Controles Arrows -->
+      <!-- /////// -->
+      <!-- Coluna Zoom e Focus -->
+      <ion-col size="4">
+        <div class="controlCenter">
+        <div class="controlConfig">
+        
+          <ion-fab-button color="danger" slot="start" (click)="openConfig()">
+                   <ion-icon name="options-outline"></ion-icon>
+          </ion-fab-button>
+        
+        </div>
+          <div class="controcenter-cards">
+            <div class="card-zoom">
+              <ion-card class="ion-padding-vertical">
+                <ion-item lines="none">
+                  <ion-fab-button slot="start" (click)="zoommIn()">
+                    <ion-icon name="remove-circle-outline"></ion-icon>
+                  </ion-fab-button>
+                  <ion-label>Zoom</ion-label>
+                  <ion-fab-button slot="end"  (click)="zoomOut()">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                  </ion-fab-button>
+                </ion-item>
+              </ion-card>
+            </div>
+
+            <div class="card-foco">
+              <ion-card class="ion-padding-vertical">
+                <ion-item lines="none">
+                  <ion-fab-button slot="start">
+                    <ion-icon name="contract-outline"  (click)="focusOpen()"></ion-icon>
+                  </ion-fab-button>
+                  <ion-label>Focus</ion-label>
+                  <ion-fab-button slot="end">
+                    <ion-icon name="expand-outline"  (click)="focusClose()"></ion-icon>
+                  </ion-fab-button>
+                </ion-item>
+              </ion-card>
+            </div>
+          </div>
+
+        </div>
+      </ion-col>
+      <!-- Fim Coluna Zoom e Focus -->
+      <!-- ////// -->
+      <!-- Columa Presets -->
+      <ion-col size="4" class="col3" >
+        <div class="segment">
+        <ion-toolbar>
+            <ion-title>Pressets</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="onClick()">
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+              </ion-button>
+            </ion-buttons> 
+          </ion-toolbar>
+
+         <ion-segment value="pizza" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="pizza">
+              <ion-label>CAM 01</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="pasta">
+              <ion-label>CAM 01</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+        
+          
+        
+        <div class="controlRight">
+         <div class="btns-presets">
+          <ion-grid>
+            <ion-row>
+              <ion-col *ngFor="let n of btnsPresets" size="6">
+                <ion-fab-button (click)="presetBtn(n.number)">
+                  <span> {{ n.number}} </span>
+                </ion-fab-button>
+              </ion-col>
+              <!-- <ion-col size="6">
+                <ion-fab-button>
+                  <span> 2 </span>
+                </ion-fab-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 3 </span>
+                </ion-fab-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 4 </span>
+                </ion-fab-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 5 </span>
+                </ion-fab-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 6 </span>
+                </ion-fab-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 7 </span>
+                </ion-fab-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 8 </span>
+                </ion-fab-button>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 9 </span>
+                </ion-fab-button>
+              </ion-col>
+              <ion-col size="6">
+                <ion-fab-button>
+                  <span> 10 </span>
+                </ion-fab-button>
+              </ion-col> -->
+            </ion-row>
+
+          </ion-grid>
+         </div>
+         
+
+
+        </div>
+
+
+      </ion-col>
+      <!-- Fim Presets -->
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>PTZ - <em>Controller</em></ion-title>
+  </ion-toolbar>
+</ion-footer>
