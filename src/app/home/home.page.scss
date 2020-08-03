@@ -29,57 +29,58 @@
                      height: 80px;
                  }
 
-                 display: flex;
-                 justify-content: center;
-                 align-items: center;
 
                  .btn-arrow-up {
-                     position: absolute;
-                     top: 204px;
-                     margin: 20px;
+                     display: flex;
+                     position: relative;
+                     justify-content: center;
                  }
 
                  .btn-arrow-down {
-                     position: absolute;
-                     top: 368px;
-                     margin: 20px;
+                     display: flex;
+                     position: relative;
+                     justify-content: center;
                  }
 
-                 .btn-arrow-left {
-                     position: absolute;
-                     left: 5px;
-                     margin: 20px;
-                     top: 290px;
+                 .btn-left-right {
+                     display: flex;
+                     position: relative;
+                     justify-content: center;
+
+                     .btn-arrow-left {
+                         position: relative;
+                         left: -32px;
+                     }
+
+                     .btn-arrow-right {
+                         position: relative;
+                         display: flex;
+                         right: -32px;
+                     }
                  }
 
-                 .btn-arrow-right {
-                     position: absolute;
-                     right: 5px;
-                     margin: 20px;
-                     top: 290px;
-                 }
              }
 
              .controlCenter {
-                 display: flex;
-                 height: 100%;
-                 position: relative;
-                 justify-content: center;
-                .controlConfig{
-                    display: flex;
-                    position: absolute;
-                    left:  0px;
-                }
+                 display: block;
+                 padding: 16px;
+                 margin: 0 auto;
+
+                
+
                  .controcenter-cards {
                      display: block;
-                     top: 200px !important;
+                    //  top: 200px !important;
                      position: absolute;
                  }
              }
-
+             .controlConfig {
+                        position: absolute;
+                        top: -10em;
+                 }
              .controlRight {
                  display: flex;
-                //  background-color: red;
+                 //  background-color: red;
 
                  .btns-presets {
                      position: relative;
@@ -112,10 +113,11 @@
          }
      }
  }
- .col3{
+
+ .col3 {
      background: var(--ion-color-warning-tint);
-    height: 100%;
-    border-radius: 16px;
-    margin: 10px 0 auto;
-    padding: 13px;
+     height: 100%;
+     border-radius: 16px;
+    //  margin: 10px 0 auto;
+     padding: 13px;
  }
