@@ -16,22 +16,28 @@
    </ion-toolbar>
  </ion-header>
 
- <ion-content>
-    <ion-card>
+ <ion-content class="ion-padding">
+    
     <form [formGroup]="form" (ngSubmit)="add()">
       <ion-item>
         <ion-label position="floating">Nome: <ion-text color="danger">*</ion-text></ion-label>
         <ion-input required formControlName="name" type="text"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Endereço IP <ion-text color="danger">*</ion-text></ion-label>
+        <ion-label position="floating">Endereço IP: <ion-text color="danger">*</ion-text></ion-label>
         <ion-input required formControlName="ipaddress" type="text"></ion-input>
       </ion-item>
-      <ion-button block color="primary" type="submit" [disabled]="form.invalid">
+      <ion-button class="save" expand="block" color="primary" type="submit" [disabled]="form.invalid">
         Salvar
       </ion-button>
     </form>
       
-
-    </ion-card>
+    <ion-list>
+      <ion-item *ngFor="let c of cams">
+        <ion-label> {{ c.name }} 
+        <p>IP: {{ c.ipaddress }} </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+     
  </ion-content>
