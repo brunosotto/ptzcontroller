@@ -10,7 +10,7 @@ export class PopoverComponent implements OnInit {
   constructor(private renderer: Renderer2) { }
 
   ngOnInit() {}
-  
+
 onToogleColorChange(ev){
     const target = ev.detail.checked;
     console.log(target);
