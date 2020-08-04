@@ -5,9 +5,7 @@
                  display: flex;
                  margin-bottom: 30px;
                  margin-top: 30px;
-             }
-
-             .title {}
+             } 
 
              .segment {
                  position: absolute;
@@ -23,7 +21,12 @@
      ion-row {
 
          ion-col {
+              .segment{
+                     position: relative;
+                     top: -6em
+                 }
              .controlLeft {
+                
                  ion-fab-button {
                      width: 80px;
                      height: 80px;
