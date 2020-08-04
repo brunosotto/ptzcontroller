@@ -19,24 +19,24 @@
 </ion-header>
 
 <ion-content>
+
+
+
   <ion-grid>
-    <ion-row class="ion-align-items-center">
+    <ion-row>
       <!-- Columa Controles Arrows -->
-      <ion-col size-xs="12" size-md="4">
-       <div class="segment">
-          <ion-segment value="pizza" (ionChange)="segmentChangedCam($event)" >
-            <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
-              <ion-label>{{ cam.name }}</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-         
-        </div>
+      <ion-col size-xs="12" size-md="4"> 
+      <div class="segment" style="position: absolute; top: 0;">
+            <ion-segment value="pizza" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
+              <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
+                <ion-label>{{ cam.name }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
 
-        <div class="controlLeft">
-
-       
-
-          <div class="btn-arrow-up">
+        <div class="controlLeft"> 
+        
+        <div class="btn-arrow-up">
             <ion-fab-button (click)="movUp()">
               <ion-icon name="arrow-up-outline"></ion-icon>
             </ion-fab-button>
@@ -62,7 +62,7 @@
             </ion-fab-button>
           </div>
         </div>
-
+        
       </ion-col>
       <!-- Fim Columa Controles Arrows -->
       <!-- /////// -->
@@ -76,10 +76,10 @@
         </div> -->
 
         <div class="controlCenter">
-
-          <div class="card-zoom">
-            <ion-card class="ion-padding-vertical">
-              <ion-item lines="none">
+ 
+            <ion-card>
+              <ion-list>
+              <ion-item lines="none" >
                 <ion-fab-button slot="start" (click)="zoommIn()">
                   <ion-icon name="remove-circle-outline"></ion-icon>
                 </ion-fab-button>
@@ -88,11 +88,13 @@
                   <ion-icon name="add-circle-outline"></ion-icon>
                 </ion-fab-button>
               </ion-item>
-            </ion-card>
-          </div>
 
-          <div class="card-foco">
-            <ion-card class="ion-padding-vertical">
+              </ion-list>
+            </ion-card>
+         
+ 
+            <ion-card>
+              <ion-list>
               <ion-item lines="none">
                 <ion-fab-button slot="start" (click)="focusOpen()">
                   <ion-icon name="contract-outline"></ion-icon>
@@ -102,11 +104,12 @@
                   <ion-icon name="expand-outline"></ion-icon>
                 </ion-fab-button>
               </ion-item>
+              </ion-list>
             </ion-card>
-          </div>
-
-           <div class="card-configs">
-            <ion-card class="ion-padding-vertical">
+           
+ 
+            <ion-card>
+             <ion-list>
               <ion-item lines="none">
                 <!-- <ion-fab-button slot="start" (click)="focusOpen()">
                   <ion-icon name="contract-outline"></ion-icon>
@@ -115,10 +118,11 @@
                 <ion-fab-button color="medium" slot="end" (click)="openConfig()">
                   <ion-icon name="options-outline"></ion-icon>
                 </ion-fab-button>
- 
+
               </ion-item>
+             </ion-list>
             </ion-card>
-          </div>
+         
 
         </div>
       </ion-col>
@@ -141,14 +145,16 @@
             </ion-grid>
           </div>
         </div>
-        
+
       </ion-col>
       <!-- Fim Presets -->
     </ion-row>
   </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="addCamera()">
+          <ion-icon name="add"></ion-icon>
+     </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
-<ion-footer>
-  <ion-toolbar>
-    <ion-title>PTZ - <em>Controller</em></ion-title>
-  </ion-toolbar>
-</ion-footer>

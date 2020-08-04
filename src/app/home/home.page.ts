@@ -1,8 +1,9 @@
-import { OverlayService } from './../services/overlay.service';
-import { ConfigmodalComponent } from './../configmodal/configmodal.component';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
-import { PopoverComponent } from '../popover/popover.component';
+import { OverlayService } from './../services/overlay.service';
+import { ConfigmodalComponent } from './../components/configmodal/configmodal.component';
+import { PopoverComponent } from './../components/popover/popover.component';
+import { AddcameraComponent } from '../components/addcamera/addcamera.component';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +45,7 @@ export class HomePage implements OnInit {
   async presetBtn(ev: number) {
   const toast = await this.overlayService.toast({ message: `Preset : ${ev}`});
   toast.prepend();
-   console.log(ev);
+  console.log(ev);
   }
 
   // Move Setas
@@ -126,5 +127,12 @@ public async pressEvent(press: any, preset: number) {
 
 private openSavePreset() {
 alert('Chamando Funcao salvar');
+}
+
+async addCamera() {
+  const modal = await this.modalCtrl.create({
+     component: AddcameraComponent
+  });
+  return modal.present();
 }
 }

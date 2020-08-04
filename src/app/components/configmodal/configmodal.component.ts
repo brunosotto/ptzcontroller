@@ -47,4 +47,5 @@ export class ConfigmodalComponent implements OnInit {
   closeModal() {
     return this.modalCtrl.dismiss();
   }
+  apply(){}
 }
