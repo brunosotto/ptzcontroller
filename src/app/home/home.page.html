@@ -26,8 +26,9 @@
     <ion-row>
       <!-- Columa Controles Arrows -->
       <ion-col size-xs="12" size-md="4"> 
-      <div class="segment" style="position: absolute; top: 0;">
-            <ion-segment value="pizza" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
+       
+      <div class="segment" style="position: absolute; top: 0;" >
+            <ion-segment value="" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
               <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
                 <ion-label>{{ cam.name }}</ion-label>
               </ion-segment-button>

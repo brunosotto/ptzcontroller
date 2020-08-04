@@ -1,3 +1,5 @@
+import { ICamera } from 'src/app/models/camera.model';
+import { CamerasService } from 'src/app/services/cameras.service';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { OverlayService } from './../services/overlay.service';
@@ -25,20 +27,23 @@ export class HomePage implements OnInit {
     {number: 10 },
 
   ];
-  public cams: Array<any> = [
-    {name: 'Cam 01', ipaddress: '192.168.25.10'},
-    {name: 'Cam 02', ipaddress: '192.168.25.11'},
-    {name: 'Cam 03', ipaddress: '192.168.25.12'},
-    {name: 'Cam 04', ipaddress: '192.168.25.13'}
-  ];
+  public cams: Array<ICamera>;
 
   constructor(
     private modalCtrl: ModalController,
     private overlayService: OverlayService,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private camerasService: CamerasService
     ) { }
 
   ngOnInit() {
+    this.camerasService.getAllCamera().then((res) => { 
+      
+      if(res){
+        this.cams = res;
+      }
+
+    });
   }
 
   //  Presets Btn

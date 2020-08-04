@@ -97,16 +97,16 @@
                  .btns-presets {
                      position: relative;
                      display: flex;
-                     margin: 16px auto;
+                    // margin: 16px auto;
 
                      ion-grid {
                          ion-row {
                              ion-col {
-
+                                  
                                  ion-fab-button {
                                      width: 70px;
                                      height: 70px;
-                                     margin: 10px;
+                                    //  margin: 10px;
 
                                      span {
                                          font-weight: 500;
