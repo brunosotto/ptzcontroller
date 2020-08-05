@@ -1,7 +1,8 @@
+import { ApicamService } from './../services/apicam.service';
 import { ICamera } from 'src/app/models/camera.model';
 import { CamerasService } from 'src/app/services/cameras.service';
-import { Component, OnInit } from '@angular/core';
-import { ModalController, PopoverController } from '@ionic/angular';
+import { Component, OnInit, ElementRef, NgZone, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { ModalController, PopoverController, GestureController, Gesture } from '@ionic/angular';
 import { OverlayService } from './../services/overlay.service';
 import { ConfigmodalComponent } from './../components/configmodal/configmodal.component';
 import { PopoverComponent } from './../components/popover/popover.component';
@@ -12,8 +13,11 @@ import { AddcameraComponent } from '../components/addcamera/addcamera.component'
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
 
+@ViewChildren('movUpBtn', {read: ElementRef }) movUpBtn: QueryList<ElementRef>;
+
+  cameraSelected = {};
   public btnsPresets: Array<any> = [
     {number: 1 },
     {number: 2 },
@@ -28,23 +32,68 @@ export class HomePage implements OnInit {
 
   ];
   public cams: Array<ICamera>;
-
+  // longPressActive = false;
+  public progress = 0;
+  public pressState = 'released';
+  delay =  1500;
+  action: any; // not stacking actions
+  private longPressActive = false;
+//  not function
+  protected interval: any;
   constructor(
     private modalCtrl: ModalController,
     private overlayService: OverlayService,
     private popoverCtrl: PopoverController,
-    private camerasService: CamerasService
+    private camerasService: CamerasService,
+    private apiCamService: ApicamService,
+    private gestureCtrl: GestureController,
+    private el: ElementRef,
+    private zone: NgZone
     ) { }
 
   ngOnInit() {
-    this.camerasService.getAllCamera().then((res) => { 
-      
-      if(res){
-        this.cams = res;
+    this.camerasService.getAllCamera().then( async (res) => {
+      if (res){
+         this.cams =  await res;
+         console.log('Res ', res);
       }
-
     });
   }
+ ngAfterViewInit() {
+   const fbArray = this.movUpBtn.toArray();
+   this.loadLongPressOnElement(fbArray);
+    }
+    // Gesture Press Ainda nao esta funcionando...
+    loadLongPressOnElement(fabbtuton) {
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < fabbtuton.length; i++){
+          const fabbtn = fabbtuton[i];
+          const gesture = this.gestureCtrl.create({
+            el: fabbtn.nativeElement,
+            gestureName: 'long-press',
+            onStart: ev => {
+                this.longPressActive = true;
+                this.longPressAction(i);
+            },
+            onEnd: ev => {
+                this.longPressActive = false;
+            }
+        });
+          gesture.enable(true);
+
+        }
+    }
+
+    longPressAction(i) {
+      console.log('Testando.....');
+      setTimeout(() => {
+        if (this.longPressActive === true)  {
+           this.zone.run(() => {
+            this.longPressAction(i);
+          });
+        }
+      }, 50);
+    }
 
   //  Presets Btn
   async presetBtn(ev: number) {
@@ -55,9 +104,33 @@ export class HomePage implements OnInit {
 
   // Move Setas
 
-  movUp(): void {
-    console.log('Movendo UP');
+  movUp($event): void {
+
+    console.log('Movendo UP',  this.cameraSelected);
+    // verificar a camera selecionada
+    if (this.cameraSelected) {
+      // carrega do storage a camera
+      this.camerasService.getCamera(this.cameraSelected).then((res: ICamera) => {
+      // verifico novamente para ver se tem algo camera
+        if (res){
+      //  se tiver alguma coisa vou faco o get no service api passando os paremtros
+          this.apiCamService.moveUp(res.ipaddress, this.longPressAction($event), res.user, res.password ).subscribe((response) => {
+            console.log('enviando mov');
+          });
+        } else {
+          return;
+        }
+
+      });
+    }
   }
+  movUpStop(): void {
+    console.log('Stop');
+  }
+  movUpPress($event){
+    console.log($event);
+  }
+
   movLeft(): void {
     console.log('Movendo Esquerda');
   }
@@ -70,7 +143,7 @@ export class HomePage implements OnInit {
 
   // Set Zoom
 
-  zoommIn(): void {
+  zoomIn(): void {
     console.log('Zoom - ');
   }
 
@@ -91,6 +164,7 @@ export class HomePage implements OnInit {
   segmentChangedCam(ev: any){
     const cam = ev.detail.value;
     console.log(cam);
+    this.cameraSelected = cam;
   }
   async openConfig() {
     const modal = await this.modalCtrl.create({
@@ -140,4 +214,32 @@ async addCamera() {
   });
   return modal.present();
 }
+
+
+    //  Usando HammerJS Funcoes
+     onPress($event) {
+        console.log('onPress', $event);
+        this.pressState = 'pressing';
+        this.startInterval();
+        // console.log(this.startInterval());
+    }
+
+    onPressUp($event) {
+        console.log('onPressUp', $event);
+        this.pressState = 'released';
+        this.stopInterval();
+    }
+
+    startInterval() {
+        const self = this;
+        // tslint:disable-next-line: only-arrow-functions
+        this.interval = setInterval(function() {
+            self.progress = self.progress + 1;
+            console.log(self.progress);
+        }, 50);
+    }
+
+    stopInterval() {
+        clearInterval(this.interval);
+    }
 }

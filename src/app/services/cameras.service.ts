@@ -15,17 +15,17 @@ export class CamerasService {
 
   constructor(private storage: Storage, private overlayService: OverlayService) { }
 
-   async addCamera(camera: ICamera)  { 
+   async addCamera(camera: ICamera)  {
       let exist  = false;
       const load = await this.overlayService.loading({message: 'Aguarde...'});
       for ( const cam of this.cameras ){
-        if ( cam.id === camera.id ) {
+        if ( cam.ipaddress === camera.ipaddress ) {
           exist = true;
         }
       }
 
       if ( exist ) {
-        this.cameras = this.cameras.filter( cam => cam.id !== camera.id);
+        this.cameras = this.cameras.filter( cam => cam.ipaddress !== camera.ipaddress);
       } else {
         this.cameras.push( camera );
       }
@@ -44,10 +44,11 @@ export class CamerasService {
 
 
 
-   async getCamera( id ) {
+   async getCamera( ipaddress ) {
      await this.getAllCamera();
-     const exist = this.cameras.find( cam => cam.id === id);
-     return ( exist ) ? true : false;
+     const cam = this.cameras.find( camera => camera.ipaddress === ipaddress );
+     return  cam || [];
+    //  return ( cam ) ? this.cameras : false;
    }
 
 

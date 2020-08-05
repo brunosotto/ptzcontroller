@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CamerasService } from 'src/app/services/cameras.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
- 
+
 
 import { ICamera } from 'src/app/models/camera.model';
 
@@ -11,7 +11,7 @@ import { ICamera } from 'src/app/models/camera.model';
   templateUrl: './addcamera.component.html',
   styleUrls: ['./addcamera.component.scss'],
 })
-export class AddcameraComponent implements OnInit {
+export class AddcameraComponent implements OnInit, OnDestroy {
 
 public form: FormGroup;
 
@@ -25,32 +25,35 @@ public form: FormGroup;
   ngOnInit() {
     this.initForm();
     this.camerasService.getAllCamera().then((res: ICamera[]) => this.cams = res);
-     
   }
 
   initForm(): void {
-    const id =  Math.floor(100 + Math.random() * 900);
+    const id =  Date.now();
     this.form = this.fb.group({
-      id:  [id],
       name: ['', Validators.required],
       ipaddress: ['', Validators.required],
+      user: ['', Validators.required],
+      password: ['', Validators.required],
       description: ['']
     });
   }
 
-  add(){
+  add(): void{
     try {
       console.log(this.form.value);
       const data = this.form.value;
       this.camerasService.addCamera(data);
+      this.form.reset();
     } catch (error) {
       console.log('ERrroroororor' , error);
     }
    }
 
-  
-  closeModal(){
+    closeModal(){
     return this.modalCtrl.dismiss();
   }
 
+  ngOnDestroy(): void {
+
+  }
 }

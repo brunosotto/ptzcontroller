@@ -1,43 +1,71 @@
-  <ion-header>
-   <ion-toolbar color="tertiary">
-     <ion-buttons slot="start">
-       <ion-button>
-       <ion-icon slot="icon-only"  name="videocam-outline"></ion-icon> 
-       </ion-button>
-     </ion-buttons>
-     <ion-title>
-       PTZ - Controller - Adicionar Câmera
-     </ion-title>
-     <ion-buttons slot="end">
-       <ion-button (click)="closeModal()">
-         <ion-icon slot="icon-only" name="close-circle"></ion-icon>
-       </ion-button>
-     </ion-buttons>
-   </ion-toolbar>
- </ion-header>
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="videocam-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      PTZ - Controller - Adicionar Câmera
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
- <ion-content class="ion-padding">
-    
-    <form [formGroup]="form" (ngSubmit)="add()">
-      <ion-item>
-        <ion-label position="floating">Nome: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-input required formControlName="name" type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Endereço IP: <ion-text color="danger">*</ion-text></ion-label>
-        <ion-input required formControlName="ipaddress" type="text"></ion-input>
-      </ion-item>
+<ion-content class="ion-padding">
+
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Nome Camera: <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="name" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Endereço IP: <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="ipaddress" inputmode="number" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- User e senha -->
+      <ion-row>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Usuário: <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="user" type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item>
+            <ion-label position="floating">Senha: <ion-text color="danger">*</ion-text>
+            </ion-label>
+            <ion-input required formControlName="password" type="password"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
       <ion-button class="save" expand="block" color="primary" type="submit" [disabled]="form.invalid">
         Salvar
       </ion-button>
-    </form>
-      
-    <ion-list>
-      <ion-item *ngFor="let c of cams">
-        <ion-label> {{ c.name }} 
+    </ion-grid>
+  </form>
+
+  <ion-list>
+    <ion-item *ngFor="let c of cams">
+      <ion-label> {{ c.name }}
         <p>IP: {{ c.ipaddress }} </p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-     
- </ion-content>
+        <small> {{ c.user }} </small>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
