@@ -23,7 +23,12 @@
          ion-col {
               .segment{
                      position: relative;
-                     top: -6em
+                     top: -6em;
+                     ion-select {
+                    width: 100%;
+
+                    justify-content: center;
+                        }
                  }
              .controlLeft {
                 position: relative;
