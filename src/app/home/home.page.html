@@ -25,11 +25,10 @@
       <!-- Columa Controles Arrows -->
       <ion-col size-xs="12" size-md="4">
 
-        <div class="segment" style="position: relative;
-    top: -5px;
-    background: rgb(51 48 48 / 2%);
-    width: auto;
-    margin: 0 auto;">
+        <div class="segment" style="position: relative; top: -5px; background: rgb(51 48 48 / 2%); width: auto; margin: 0 auto;">
+        <ion-note color="danger" *ngIf="cams?.length <= 0 ">
+        {{ notfoundcam }}
+        </ion-note>
           <ng-container *ngIf="cams?.length < 4; else ionSelect">
             <ion-segment value="" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
               <ion-segment-button *ngFor="let cam of cams" [value]="cam.ipaddress">
@@ -44,7 +43,7 @@
             </ion-select>
           </ng-template>
 
-
+          <ion-badge color="primary" mode="ios">{{ cameraSelected | json }}  </ion-badge>
         </div>
 
         <div class="controlLeft">
