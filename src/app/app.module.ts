@@ -15,10 +15,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { SharedModule } from './shared/shared.module';
-import { IonicGestureConfig } from './gestures/ionic-gesture-config';
-import { LongPressDirective } from './directives/longpress.directive';
+
 @NgModule({
-  declarations: [AppComponent, LongPressDirective],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -37,7 +36,6 @@ import { LongPressDirective } from './directives/longpress.directive';
     SplashScreen,
     ScreenOrientation,
     HttpClient,
-    LongPressDirective,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     // { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig }
   ],
