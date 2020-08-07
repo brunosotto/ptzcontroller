@@ -7,6 +7,8 @@ import { OverlayService } from './../services/overlay.service';
 import { ConfigmodalComponent } from './../components/configmodal/configmodal.component';
 import { PopoverComponent } from './../components/popover/popover.component';
 import { AddcameraComponent } from '../components/addcamera/addcamera.component';
+import { Observable, Subject } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -14,24 +16,24 @@ import { AddcameraComponent } from '../components/addcamera/addcamera.component'
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-
+  private reload$ = new Subject();
 
   cameraSelected = {};
   public btnsPresets: Array<any> = [
-    {number: 1 },
-    {number: 2 },
-    {number: 3 },
-    {number: 4 },
-    {number: 5 },
-    {number: 6 },
-    {number: 7 },
-    {number: 8 },
-    {number: 9 },
-    {number: 10 },
+    { number: 1 },
+    { number: 2 },
+    { number: 3 },
+    { number: 4 },
+    { number: 5 },
+    { number: 6 },
+    { number: 7 },
+    { number: 8 },
+    { number: 9 },
+    { number: 10 },
 
   ];
   public cams: Array<ICamera>;
-
+  public notfoundcam = 'Por favor adicione uma câmera.'
   public startTime: number;
   public endTime: number;
 
@@ -41,47 +43,52 @@ export class HomePage implements OnInit {
     private popoverCtrl: PopoverController,
     private camerasService: CamerasService,
     private apiCamService: ApicamService,
-    ) { }
+  ) { }
 
   ngOnInit() {
-    this.camerasService.getAllCamera().then( async (res) => {
-      if (res){
-         this.cams =  await res;
-         console.log('Res ', res);
-      }
+
+    this.reload$.pipe(startWith([null])).subscribe(_ => {
+      this.camerasService.getAllCamera().then((res) => {
+        if (res) {
+          this.cams = res;
+          console.table(res);
+        } else {
+          this.notfoundcam;
+        }
+      });
     });
   }
 
- 
+
   // Move Setas
 
   movUp(): void {
     console.log('Start > ');
-/*
-    console.log('Movendo UP',  this.cameraSelected);
-    // verificar a camera selecionada
-    if (this.cameraSelected) {
-      // carrega do storage a camera
-      this.camerasService.getCamera(this.cameraSelected).then((res: ICamera) => {
-      // verifico novamente para ver se tem algo camera
-        if (res){
-      //  se tiver alguma coisa vou faco o get no service api passando os paremtros
-          this.apiCamService.moveUp(res.ipaddress, this.longPressAction($event), res.user, res.password ).subscribe((response) => {
-            console.log('enviando mov');
+    /*
+        console.log('Movendo UP',  this.cameraSelected);
+        // verificar a camera selecionada
+        if (this.cameraSelected) {
+          // carrega do storage a camera
+          this.camerasService.getCamera(this.cameraSelected).then((res: ICamera) => {
+          // verifico novamente para ver se tem algo camera
+            if (res){
+          //  se tiver alguma coisa vou faco o get no service api passando os paremtros
+              this.apiCamService.moveUp(res.ipaddress, this.longPressAction($event), res.user, res.password ).subscribe((response) => {
+                console.log('enviando mov');
+              });
+            } else {
+              return;
+            }
+    
           });
-        } else {
-          return;
         }
-
-      });
-    }
-    */
+        */
   }
 
   movLeft(): void {
     console.log('Movendo Esquerda');
   }
-   movRight(): void {
+  movRight(): void {
     console.log('Movendo Direita');
   }
   movDown(): void {
@@ -99,16 +106,16 @@ export class HomePage implements OnInit {
   }
 
   // Set Focus
-  focusOpen(): void  {
+  focusOpen(): void {
     console.log('Focus Open');
   }
 
-  focusClose(): void  {
+  focusClose(): void {
     console.log('Focus Closed');
   }
 
   // Selecionar Camera
-  segmentChangedCam(ev: any){
+  segmentChangedCam(ev: any) {
     const cam = ev.detail.value;
     console.log(cam);
     this.cameraSelected = cam;
@@ -120,7 +127,7 @@ export class HomePage implements OnInit {
     });
     return modal.present();
   }
-   async openPopover() {
+  async openPopover() {
     const popover = await this.popoverCtrl.create({
       component: PopoverComponent,
       event,
@@ -128,66 +135,71 @@ export class HomePage implements OnInit {
     return popover.present();
   }
 
- async presetStart(dateStart, preset) {
+  async presetStart(dateStart, preset) {
 
-  this.startTime = new Date().getTime();
-  const toast = await this.overlayService.toast({ message: `Preset : ${preset}`});
-  toast.prepend();
-  console.log('Date Start', dateStart);
+    this.startTime = new Date().getTime();
+    const toast = await this.overlayService.toast({ message: `Preset : ${preset}` });
+    toast.prepend();
+    console.log('Date Start', dateStart);
   }
 
- async presetLongPress( endTime, preset ){
+  async presetLongPress(endTime, preset) {
 
-   this.endTime = new Date().getTime();
-   endTime = this.endTime;
-   const calcTime = endTime - this.startTime;
+    this.endTime = new Date().getTime();
+    endTime = this.endTime;
+    const calcTime = endTime - this.startTime;
 
-   if (calcTime >= 600) {
-    const modal = await this.overlayService.alert({
-      header: 'PTZ Controller',
-      message: `Deseja salvar Preset : ${preset}`,
-      buttons: [
-        {
-          text: 'Não',
-          role: 'cancel',
-        },
-        {
-          text: 'Sim',
-          role: 'confirm',
-          handler: () => {
-            this.openSavePreset();
+    if (calcTime >= 600) {
+      const modal = await this.overlayService.alert({
+        header: 'PTZ Controller',
+        message: `Deseja salvar Preset : ${preset}`,
+        buttons: [
+          {
+            text: 'Não',
+            role: 'cancel',
+          },
+          {
+            text: 'Sim',
+            role: 'confirm',
+            handler: () => {
+              this.openSavePreset();
+            }
           }
-        }
-      ]
-    });
-    return modal.present();
+        ]
+      });
+      return modal.present();
     }
 
 
 
 
-   if (calcTime > 600 ) {
-     console.log('Maior que 600 >   ', calcTime);
-   } else {
+    if (calcTime > 600) {
+      console.log('Maior que 600 >   ', calcTime);
+    } else {
       console.log('MENOR que 600 >   ', calcTime);
-   }
+    }
 
-}
-private openSavePreset() {
-alert('Chamando Funcao salvar');
-}
+  }
+  private openSavePreset() {
+    alert('Chamando Funcao salvar');
+  }
 
-async addCamera() {
-  const modal = await this.modalCtrl.create({
-     component: AddcameraComponent
-  });
-  return modal.present();
-}
+  async addCamera() {
+    const modal = await this.modalCtrl.create({
+      component: AddcameraComponent,
+      componentProps: { cam: this.cams }
+    });
 
-stop(): void {
+    modal.dismiss().then(() => {
+      this.reload$.next();
+    });
+    return await modal.present();
+  }
+
+  stop(): void {
     console.log('StopEnd  > ');
     setTimeout(() => {
-        console.log('Stop');
-     }, 0);
+      console.log('Stop');
+    }, 0);
   }
 }

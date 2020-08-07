@@ -1,17 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CamerasService } from 'src/app/services/cameras.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 import { ICamera } from 'src/app/models/camera.model';
+import { Observable, Subject } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addcamera',
   templateUrl: './addcamera.component.html',
   styleUrls: ['./addcamera.component.scss'],
 })
-export class AddcameraComponent implements OnInit, OnDestroy {
+export class AddcameraComponent implements OnInit {
+
+private reload$ = new Subject();
 
 public form: FormGroup;
 
@@ -44,16 +48,23 @@ public form: FormGroup;
       const data = this.form.value;
       this.camerasService.addCamera(data);
       this.form.reset();
+
     } catch (error) {
       console.log('ERrroroororor' , error);
     }
    }
 
-    closeModal(){
-    return this.modalCtrl.dismiss();
+    deleteCam(ipaddress) {
+    this.reload$.pipe(startWith([null])).subscribe(_ => {
+      this.camerasService.deleteCamera(ipaddress);
+      this.camerasService.getAllCamera().then((res: any) => {
+        return this.cams = res;
+      });
+    });
   }
 
-  ngOnDestroy(): void {
-
+    closeModal(cam: ICamera): void {
+        this.modalCtrl.dismiss(cam);
   }
+
 }

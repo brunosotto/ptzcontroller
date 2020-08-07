@@ -1,9 +1,7 @@
-import { OverlayService } from './overlay.service';
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ICamera } from './../models/camera.model';
-
+import { OverlayService } from './overlay.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,16 +28,21 @@ export class CamerasService {
         this.cameras.push( camera );
       }
       load.dismiss();
+
       this.storage.set('cameras', this.cameras);
+
+
       this.overlayService.toast({ message: 'Adicionado com sucesso.'});
       return !exist;
 
    }
 
     async getAllCamera()  {
-         const cams = await this.storage.get('cameras');
-         this.cameras = cams || [];
-         return this.cameras;
+     return this.storage.ready().then(async () => {
+      const cams = await this.storage.get('cameras');
+      this.cameras = cams || [];
+      return this.cameras;
+        }).catch((e) => console.log(e));
     }
 
 
@@ -52,14 +55,14 @@ export class CamerasService {
    }
 
 
-   async updateCamera(id){
+   async updateCamera(cam: ICamera){
      await this.getAllCamera();
-     const exist = this.cameras.find( cam => cam.id === id);
-     return ( exist ) ? true : false;
+     const ArrayCamUpdate = this.cameras.find(camera => camera.ipaddress === cam.ipaddress );
+     this.storage.set('cameras', ArrayCamUpdate);
    }
 
-   deleteCamera(id) {
-     const ArrayCam = this.cameras.filter(res =>  res.id !== id  );
+   deleteCamera(ipaddress) {
+     const ArrayCam = this.cameras.filter(res =>  res.ipaddress !== ipaddress  );
      this.storage.set('cameras', ArrayCam);
    }
 

@@ -63,6 +63,13 @@ export class ConfigmodalComponent implements OnInit {
   }
   apply(){
     console.log(this.form.value);
+  }
 
+  default(){
+    this.form.reset();
+    this.dataSettingsDefaut.brightness = 0;
+    this.dataSettingsDefaut.contrast = 0;
+    this.dataSettingsDefaut.saturation = 0;
+    this.dataSettingsDefaut.exposure = 0;
   }
 }

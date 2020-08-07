@@ -7,6 +7,9 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { Subject } from 'rxjs';
+import { startWith } from 'rxjs/operators';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -14,7 +17,8 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 })
 export class AppComponent implements OnInit {
 
-cameras: ICamera[];
+  private reload$ = new Subject();
+  cameras: ICamera[];
 
   constructor(
     private platform: Platform,
@@ -41,8 +45,13 @@ cameras: ICamera[];
   }
 
   ngOnInit() {
-    this.camerasService.getAllCamera().then(async (res) => {
-      this.cameras = await res;
+    this.reload$.pipe(startWith([null])).subscribe(_ => {
+      this.camerasService.getAllCamera().then((res) => {
+        if (res) {
+          this.cameras = res;
+        }
+      });
     });
   }
+
 }
