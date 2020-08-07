@@ -102,7 +102,9 @@
                      ion-grid {
                          ion-row {
                              ion-col {
-                                  
+                                    position: relative;
+                                    display: flex;
+                                    justify-content: center;
                                  ion-fab-button {
                                      width: 70px;
                                      height: 70px;

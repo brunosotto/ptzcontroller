@@ -7,17 +7,19 @@
           <ion-note>bruno@sotto.com.br</ion-note>
 
           <ion-menu-toggle auto-hide="false" >
-            <!-- <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item> -->
+           
           </ion-menu-toggle>
         </ion-list>
 
         <ion-list id="labels-list">
           <ion-list-header>Lista de Cameras</ion-list-header>
 
-           
+            <ion-item *ngFor="let c of cameras" lines="none" detail="false" >
+              <ion-icon slot="start" name="videocam-outline"></ion-icon>
+              <ion-label>{{c.name }}
+              <p> {{ c.ipaddress }} </p>
+              </ion-label>
+            </ion-item>
         </ion-list>
       </ion-content>
     </ion-menu>

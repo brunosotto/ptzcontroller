@@ -18,18 +18,20 @@
 
 </ion-header>
 
-<ion-content>
-
-
-
+<ion-content> 
+  
   <ion-grid>
     <ion-row>
       <!-- Columa Controles Arrows -->
       <ion-col size-xs="12" size-md="4"> 
        
-      <div class="segment" style="position: absolute; top: 0;" >
+      <div class="segment" style="position: relative;
+    top: -5px;
+    background: rgb(51 48 48 / 2%);
+    width: auto;
+    margin: 0 auto;" >
             <ion-segment value="" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
-              <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
+              <ion-segment-button *ngFor="let cam of cams" [value]="cam.ipaddress">
                 <ion-label>{{ cam.name }}</ion-label>
               </ion-segment-button>
             </ion-segment>
@@ -37,7 +39,7 @@
 
         <div class="controlLeft"> 
         
-        <div class="btn-arrow-up">
+        <div #movUpBtn class="btn-arrow-up">
             <ion-fab-button (click)="movUp()">
               <ion-icon name="arrow-up-outline"></ion-icon>
             </ion-fab-button>
@@ -81,10 +83,13 @@
             <ion-card>
               <ion-list>
               <ion-item lines="none" >
-                <ion-fab-button slot="start" (click)="zoommIn()">
+                <ion-fab-button slot="start" (click)="zoomIn()" (press)="onPress($event)" (pressup)="onPressUp($event)">
                   <ion-icon name="remove-circle-outline"></ion-icon>
+                 <div style="position: absolute;    display: block;    bottom: 2px;">
+                  <small>{{ progress }}</small>
+                 </div>
                 </ion-fab-button>
-                <ion-label>Zoom</ion-label>
+                <ion-label> Zoom </ion-label>
                 <ion-fab-button slot="end" (click)="zoomOut()">
                   <ion-icon name="add-circle-outline"></ion-icon>
                 </ion-fab-button>

@@ -1,81 +1,94 @@
- <ion-header>
-   <ion-toolbar color="tertiary">
-     <ion-buttons slot="start">
-       <ion-button>
-         <ion-icon slot="icon-only" name="options-outline"></ion-icon>
-       </ion-button>
-     </ion-buttons>
-     <ion-title>
-       PTZ - Controller
-     </ion-title>
-     <ion-buttons slot="end">
-       <ion-button (click)="closeModal()">
-         <ion-icon slot="icon-only" name="close-circle"></ion-icon>
-       </ion-button>
-     </ion-buttons>
-   </ion-toolbar>
- </ion-header>
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      PTZ - Controller
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
- <ion-content>
-   <ion-list>
-     <ion-item class="ion-padding-vertical"> 
-       <ion-range min="0" max="100" color="danger" pin="true" (ionChange)="rangerBright($event)" [value]="dataSettings.brightness || dataSettingsDefaut.brightness">
-        <ion-label slot="start">Brilho </ion-label>
-         <ion-icon size="small" slot="start" name="sunny"></ion-icon>
-         <ion-icon slot="end" name="sunny"></ion-icon>
-       </ion-range>
-       <ion-input class="inputs" type="number" [value]="dataSettings.brightness || dataSettingsDefaut.brightness"></ion-input>
-     </ion-item>
+<ion-content>
+  <ion-list>
 
-    <ion-item class="ion-padding-vertical"> 
-          <ion-range min="0" max="255" color="danger" pin="true" (ionChange)="rangeSaturation($event)" [value]="dataSettings.saturation || dataSettingsDefaut.saturation">
-            <ion-label slot="start">Saturação </ion-label>
-            <ion-icon size="small" slot="start" name="sunny"></ion-icon>
-            <ion-icon slot="end" name="sunny"></ion-icon>
-          </ion-range>
-          <ion-input class="inputs" type="number" [value]="dataSettings.saturation || dataSettingsDefaut.saturation"></ion-input>
-        </ion-item>
+    <form [formGroup]="form" (ngSubmit)="apply()">
 
-    <ion-item class="ion-padding-vertical"> 
-       <ion-range min="0" max="100" color="danger" pin="true" (ionChange)="rangerContrast($event)" [value]="dataSettings.contrast || dataSettingsDefaut.contrast">
-        <ion-label slot="start">Constraste </ion-label>
-         <ion-icon size="small" slot="start" name="contrast"></ion-icon>
-         <ion-icon slot="end" name="contrast"></ion-icon>
-       </ion-range>
-       <ion-input class="inputs" type="number" [value]="dataSettings.contrast || dataSettingsDefaut.contrast"></ion-input>
-     </ion-item>
+      <ion-item class="ion-padding-vertical">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="brightness"
+          (ionChange)="rangerBright($event)" [value]="dataSettings.brightness">
+          <ion-label slot="start">Brilho </ion-label>
+          <ion-icon size="small" slot="start" name="sunny"></ion-icon>
+          <ion-icon slot="end" name="sunny"></ion-icon>
+        </ion-range>
+        <ion-input class="inputs" type="number" [value]="dataSettings.brightness || dataSettingsDefaut.brightness">
+        </ion-input>
+      </ion-item>
 
-<ion-item class="ion-padding-vertical"> 
-       <ion-range min="0" max="100" color="danger" pin="true" (ionChange)="rangerExposure($event)" [value]="dataSettings.exposure || dataSettingsDefaut.exposure">
-        <ion-label slot="start">Exposição </ion-label>
-         <ion-icon size="small" slot="start" name="aperture"></ion-icon>
-         <ion-icon slot="end" name="aperture"></ion-icon>
-       </ion-range>
-       <ion-input class="inputs" type="number" [value]="dataSettings.exposure || dataSettingsDefaut.exposure"></ion-input>
-     </ion-item>
-   
-   </ion-list>
- </ion-content>
- <ion-footer>
-   <ion-toolbar>
-     <ion-grid fixed>
-       <ion-row>
-         <ion-col size="4">
-           <ion-button (click)="closeModal()" color="medium" expand="block">
-             Cancelar
-           </ion-button>
-         </ion-col>
-         <ion-col size="4">
-           <ion-button (click)="closeModalPassData()" color="success" expand="block">
-             Aplicar
-           </ion-button>
-         </ion-col>
-         <ion-col size="4">
-           <ion-button (click)="apply()" color="secondary" expand="block">
-             Default
-           </ion-button>
-         </ion-col>
-       </ion-row>
-     </ion-grid>
-   </ion-toolbar>
- </ion-footer>
+      <ion-item class="ion-padding-vertical">
+        <ion-range min="0" max="255" color="danger" pin="true" formControlName="saturation"
+          (ionChange)="rangeSaturation($event)" [value]="dataSettings.saturation || dataSettingsDefaut.saturation">
+          <ion-label slot="start">Saturação </ion-label>
+          <ion-icon size="small" slot="start" name="sunny"></ion-icon>
+          <ion-icon slot="end" name="sunny"></ion-icon>
+        </ion-range>
+        <ion-input class="inputs" type="number" [value]="dataSettings.saturation || dataSettingsDefaut.saturation">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="ion-padding-vertical">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="contrast"
+          (ionChange)="rangerContrast($event)" [value]="dataSettings.contrast || dataSettingsDefaut.contrast">
+          <ion-label slot="start">Constraste </ion-label>
+          <ion-icon size="small" slot="start" name="contrast"></ion-icon>
+          <ion-icon slot="end" name="contrast"></ion-icon>
+        </ion-range>
+        <ion-input class="inputs" type="number" [value]="dataSettings.contrast || dataSettingsDefaut.contrast">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="ion-padding-vertical">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="exposure"
+          (ionChange)="rangerExposure($event)" [value]="dataSettings.exposure || dataSettingsDefaut.exposure">
+          <ion-label slot="start">Exposição </ion-label>
+          <ion-icon size="small" slot="start" name="aperture"></ion-icon>
+          <ion-icon slot="end" name="aperture"></ion-icon>
+        </ion-range>
+        <ion-input class="inputs" type="number" [value]="dataSettings.exposure || dataSettingsDefaut.exposure">
+        </ion-input>
+      </ion-item>
+    </form>
+
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="4">
+          <ion-button (click)="closeModal()" color="medium" expand="block">
+            Cancelar
+          </ion-button>
+        </ion-col>
+        <ion-col size="4">
+          <ion-button (click)="closeModalPassData()" type="submit" [disabled]="form.invalid" color="success"
+            expand="block">
+            Aplicar
+          </ion-button>
+        </ion-col>
+        <ion-col size="4">
+          <ion-button (click)="apply()" color="secondary" expand="block">
+            Default
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

@@ -6,38 +6,54 @@ import { CamerasService } from './cameras.service';
   providedIn: 'root'
 })
 export class ApicamService {
+  private apiCgiBase = '/web/cgi-bin/hi3510/';
 
   constructor(private http: HttpClient, private camerasService: CamerasService) { }
 
   // Move Setas
 
-  moveUp(ipaddress: string, movU ){
-     const headers = new HttpHeaders();
-     return this.http.get(ipaddress, { params: movU });
+  moveUp(ipaddress: string, action, user, password){
+
+     const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers});
   }
 
-  moveDown(ipaddress: string, movD: any  ){
-     const headers = new HttpHeaders();
-     return this.http.get(ipaddress, { params: movD });
+  moveDown(ipaddress: string, action, user, password){
+      const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+      return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
   }
 
-  moveLeft(ipaddress: string, movL: any ){
-     const headers = new HttpHeaders();
-     return this.http.get(ipaddress, { params: movL });
+  moveLeft(ipaddress: string, action, user, password){
+     const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
   }
 
-  moveRigth(ipaddress: string , movR: any ){
-      const headers = new HttpHeaders();
-      return this.http.get(ipaddress, { params: movR });
+  moveRigth(ipaddress: string, action, user, password){
+      const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+      return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
     }
 
   // Enviando Presets
 
-  sendPreset(ipaddress: string , preset: any){
-   return this.http.get(ipaddress, { params: preset });
+  sendPreset(ipaddress: string, action, user, password, options?: any ){
+      const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+      return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
   }
 
-  sendConfigs(ipaddress: string, configs: any) {
-    return this.http.get(ipaddress, {params: configs });
+  sendConfigs(ipaddress: string, action, user, password, options?: any ) {
+     const headers = new HttpHeaders()
+     .set('Authorization', `${user}:${password}`);
+
+     return this.http.get(ipaddress, { params: action, headers });
   }
 }
