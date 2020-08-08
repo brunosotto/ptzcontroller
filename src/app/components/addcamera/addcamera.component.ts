@@ -114,7 +114,7 @@ export class AddcameraComponent implements OnInit {
 
 
 
-  closeModal(cam: ICamera): void {
+  closeModal(cam?: ICamera): void {
     this.modalCtrl.dismiss(cam);
   }
 
