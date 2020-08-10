@@ -1,4 +1,5 @@
  ion-header {
+     
      ion-toolbar {
          ion-title {
              .content-header {
@@ -22,20 +23,26 @@
 
          ion-col {
               .segment{
-                     position: relative;
-                     top: -6em;
-                     ion-select {
+                position: relative;
+                top: -0.5rem;
+                width: 100%;
+                ion-note{
+                    font-size: small;
+                }
+                         ion-select {
                     width: 100%;
-
                     justify-content: center;
+                    align-items: center;
                         }
                  }
              .controlLeft {
                 position: relative;
-                top: 25%;
+                top: 1rem;
+                padding: 5px;
+                margin: 0.6rem;
                  ion-fab-button {
-                     width: 80px;
-                     height: 80px;
+                     width: 4em;
+                     height: 4em;
                  }
 
 
@@ -71,17 +78,20 @@
              }
 
              .controlCenter {
-                 display: block;
-                 padding: 16px;
-                 margin: 0 auto;
+                 display: block; 
                  ion-card{
                      ion-list{
                          ion-item{
+                             
                              ion-label {
-                                 font-size: 20px;
-                                 text-align: center;
+                                font-size: 0.8rem;
+                                text-align: center;
+                                padding: 10px;
                              }
                              ion-fab-button {
+                                 
+                                 width: 3em;
+                                 height: 3em;
                                  margin: 8px 0 8px 0px;
                              }
                          }
@@ -97,7 +107,9 @@
                  }
              .controlRight {
                  display: flex;
-                 //  background-color: red;
+                
+                top: -10px;
+                position: relative;
 
                  .btns-presets {
                      position: relative;
@@ -111,13 +123,13 @@
                                     display: flex;
                                     justify-content: center;
                                  ion-fab-button {
-                                     width: 70px;
-                                     height: 70px;
+                                     width: 3em;
+                                     height: 3em;
                                     //  margin: 10px;
 
                                      span {
-                                         font-weight: 500;
-                                         font-size: 22px;
+                                         font-weight: 400;
+                                         font-size: 20px;
                                      }
                                  }
                              }
@@ -139,4 +151,12 @@
      border-radius: 16px;
     //  margin: 10px 0 auto;
      padding: 13px;
+ }
+ .prest-titulo{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    top: -8px;
+    padding: 0px;
+    margin: 0px; 
  }

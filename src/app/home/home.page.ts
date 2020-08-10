@@ -115,10 +115,11 @@ export class HomePage implements OnInit {
   }
 
   // Selecionar Camera
-  segmentChangedCam(ev: any) {
+  async segmentChangedCam(ev: any) {
     const cam = ev.detail.value;
     console.log(cam);
     this.cameraSelected = cam;
+    await this.overlayService.toast({ message: `Câmera selecionada! IP: <strong> ${cam}</strong>`});
   }
 
   async openConfig() {
@@ -138,7 +139,7 @@ export class HomePage implements OnInit {
   async presetStart(dateStart, preset) {
 
     this.startTime = new Date().getTime();
-    const toast = await this.overlayService.toast({ message: `Preset : ${preset}` });
+    const toast = await this.overlayService.toast({ message: `Preset : ${preset}`,duration: 500 });
     toast.prepend();
     console.log('Date Start', dateStart);
   }
@@ -149,14 +150,18 @@ export class HomePage implements OnInit {
     endTime = this.endTime;
     const calcTime = endTime - this.startTime;
 
-    if (calcTime >= 600) {
+    if (calcTime >= 1000) {
       const modal = await this.overlayService.alert({
         header: 'PTZ Controller',
         message: `Deseja salvar Preset : ${preset}`,
+        backdropDismiss: false,
         buttons: [
           {
             text: 'Não',
             role: 'cancel',
+            handler: () => {
+              console.log('Cancelado');
+            }
           },
           {
             text: 'Sim',
@@ -173,10 +178,10 @@ export class HomePage implements OnInit {
 
 
 
-    if (calcTime > 600) {
-      console.log('Maior que 600 >   ', calcTime);
+    if (calcTime > 1000) {
+      console.log('Maior que 1000 >   ', calcTime);
     } else {
-      console.log('MENOR que 600 >   ', calcTime);
+      console.log('MENOR que 1000 >   ', calcTime);
     }
 
   }
@@ -187,6 +192,7 @@ export class HomePage implements OnInit {
   async addCamera() {
     const modal = await this.modalCtrl.create({
       component: AddcameraComponent,
+      backdropDismiss: false,
       componentProps: { cam: this.cams }
     });
 
