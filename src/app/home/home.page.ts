@@ -115,6 +115,9 @@ export class HomePage implements OnInit {
     }
 
     this.startTime = new Date().getTime();
+    this.pointeTimeout = setTimeout(()=>{
+      // vibrar
+    }, 1000);
   }
 
   public presetEnd(preset: number): void {
@@ -128,6 +131,7 @@ export class HomePage implements OnInit {
       this.presetLongPress(preset);
     }
     else {
+      clearTimeout(this.)
       this.presetShortPress(preset);
     }
   }
