@@ -1,12 +1,12 @@
 import { OverlayService } from './../../services/overlay.service';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { CamerasService } from 'src/app/services/cameras.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 import { ICamera } from 'src/app/models/camera.model';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 @Component({
@@ -38,6 +38,7 @@ export class AddcameraComponent implements OnInit {
     private overlayService: OverlayService) { }
 
   ngOnInit() {
+    
     if (!this.id) {
       return;
     }

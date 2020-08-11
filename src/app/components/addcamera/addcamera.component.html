@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>
-      PTZ - Controller - Adicionar Câmera {{ id | date: 'yyyy' }}
+      PTZ - Adicionar Câmera | {{ id | date: 'dd/MM/yyyy' }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal()">
@@ -20,67 +20,71 @@
 <!-- (ngSubmit)="clicked ? onEditSubmit($event) : onRegisterSubmit($event)" [formGroup] = "form"
 (ngSubmit)="onRegisterSubmit(form)" [formGroup] = "form"
  -->
-  <form (ngSubmit)="onAddSubmit(form)"  [formGroup]="form">
+  
  
 
     <ion-grid fixed>
       <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label position="floating">Nome Camera: <ion-text color="danger">*</ion-text>
-            </ion-label>
-            <ion-input required formControlName="name" type="text"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label position="floating">Endereço IP: <ion-text color="danger">*</ion-text>
-            </ion-label>
-            <ion-input required formControlName="ipaddress" inputmode="number" type="text"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <!-- User e senha -->
-      <ion-row>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label position="floating">Usuário: <ion-text color="danger">*</ion-text>
-            </ion-label>
-            <ion-input required formControlName="user" type="text"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6">
-          <ion-item>
-            <ion-label position="floating">Senha: <ion-text color="danger">*</ion-text>
-            </ion-label>
-            <ion-input required formControlName="password" type="password"></ion-input>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
         <ion-col size="12">
+          <ion-list-header> <ion-label> Cadastrar Câmera</ion-label></ion-list-header>
+          <form (ngSubmit)="onAddSubmit(form)"  [formGroup]="form">
+          <ion-list>
             <ion-item>
-            <ion-label position="floating">Descrição: <br><small>Opcional</small>
-            </ion-label> 
-             <ion-textarea formControlName="description"></ion-textarea>
-          </ion-item>
+              <ion-label position="floating">Nome Camera: <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required formControlName="name" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Endereço IP: <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required formControlName="ipaddress" inputmode="numeric" type="text"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Usuário: <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required formControlName="user" type="text"></ion-input>
+            </ion-item>
+  
+            <ion-item>
+              <ion-label position="floating">Senha: <ion-text color="danger">*</ion-text>
+              </ion-label>
+              <ion-input required formControlName="password" type="password"></ion-input>
+            </ion-item>
+  
+            <ion-item>
+              <ion-label position="floating">Descrição: <br><small>Opcional</small>
+              </ion-label> 
+               <ion-textarea formControlName="description"></ion-textarea>
+            </ion-item>
+          </ion-list>
+        
+          <ion-button class="save" expand="block" color="primary" type="submit" [disabled]="!form.valid">
+            salvar
+           </ion-button>
+          </form>
         </ion-col>
-      </ion-row>
-      <ion-button class="save" expand="block" color="primary" type="submit" [disabled]="!form.valid">
-       salvar
-      </ion-button>
-    </ion-grid>
-  </form>
 
-  <ion-list>
-    <ion-item *ngFor="let c of cams; let i = index">
-      <ion-label> {{ c.name }}
-        <p>IP: {{ c.ipaddress }} </p>
+        <ion-col size="12">
+          
          
-      </ion-label>
-      <ion-icon slot="end" name="create-outline" (click)="onEditSubmit(c, i)">  </ion-icon>
-      <ion-icon slot="end" name="trash" (click)="deleteCam(c.ipaddress)"></ion-icon>
-    </ion-item>
-  </ion-list>
+            <ion-list style="padding-top: 0 !important;">
+              <ion-list-header> <ion-label> Lista de Câmeras</ion-label></ion-list-header>
+              <ion-item *ngFor="let c of cams; let i = index" (click)="onEditSubmit(c, i)">
+                <ion-label> {{ c.name }}
+                  <p>IP: {{ c.ipaddress }} </p>
+                   
+                </ion-label>
+                <ion-icon slot="end" color="warning" name="create-outline" (click)="onEditSubmit(c, i)">  </ion-icon>
+                <ion-icon slot="end" color="danger" name="trash" (click)="deleteCam(c.ipaddress)"></ion-icon>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        
+       
+      </ion-row>
+  </ion-grid>
+ 
+
+  
 
 </ion-content>
