@@ -1,68 +1,56 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CamerasService } from './cameras.service';
+import { ICamera } from '../models/camera.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+   providedIn: 'root'
 })
 export class ApicamService {
-  private apiCgiBase = '/web/cgi-bin/hi3510/';
+   private apiCgiBase = 'web/cgi-bin/hi3510';
 
-  constructor(private http: HttpClient, private camerasService: CamerasService) { }
+   constructor(
+      private http: HttpClient,
+   ) {
 
-  // Move Setas
-  moveUp(ipaddress: string, action, user, password){
-     const loginBase64 = btoa(`${user}:${password}`);
+   }
 
-     const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
-
-     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers});
-  }
-
-  moveDown(ipaddress: string, action, user, password){
-      const loginBase64 = btoa(`${user}:${password}`);
+   private getHeaders(cam: ICamera): HttpHeaders {
+      const loginBase64 = btoa(`${cam.user}:${cam.password}`);
       const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
+         .set('Authorization', `basic ${loginBase64}`);
+      return headers;
+   }
 
-      return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
-  }
+   public action(cam: ICamera, act: string): Observable<any> {
+      const params = {
+         '-step': '0',
+         '-act': act,
+         '-speed': '45',
+      };
+      const headers = this.getHeaders(cam);
+      return this.http.get(`http://${cam.ipaddress}/${this.apiCgiBase}/ptzctrl.cgi`, { params, headers});
+   }
 
-  moveLeft(ipaddress: string, action, user, password){
-     const loginBase64 = btoa(`${user}:${password}`);
+   public savePreset(cam: ICamera, preset: number): Observable<any> {
+      const params = {
+         cmd: 'preset',
+         '-act': 'set',
+         '-status': '1',
+         '-number': String(preset),
+      };
+      const headers = this.getHeaders(cam);
+      return this.http.get(`http://${cam.ipaddress}/${this.apiCgiBase}/param.cgi`, { params, headers });
+   }
 
-     const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
-
-     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
-  }
-
-  moveRigth(ipaddress: string, action, user, password){
-     const loginBase64 = btoa(`${user}:${password}`);
-
-     const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
-
-     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
-    }
-
-  // Enviando Presets
-  sendPreset(ipaddress: string, action, user, password, options?: any ){
-     const loginBase64 = btoa(`${user}:${password}`);
-
-     const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
-
-     return this.http.get('http://' + ipaddress + this.apiCgiBase, { params: action, headers });
-  }
-
-  // Setando configuraçao 
-  sendConfigs(ipaddress: string, action, user, password, options?: any ) {
-     const loginBase64 = btoa(`${user}:${password}`);
-
-     const headers = new HttpHeaders()
-     .set('Authorization', `basic ${loginBase64}`);
-
-     return this.http.get(ipaddress, { params: action, headers });
-  }
+   public gotoPreset(cam: ICamera, preset: number): Observable<any> {
+      const params = {
+         cmd: 'preset',
+         '-act': 'goto',
+         '-status': '0',
+         '-number': String(preset),
+      };
+      const headers = this.getHeaders(cam);
+      return this.http.get(`http://${cam.ipaddress}/${this.apiCgiBase}/param.cgi`, { params, headers });
+   }
 }
