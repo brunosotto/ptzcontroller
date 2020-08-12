@@ -1,5 +1,5 @@
 import { Storage } from '@ionic/storage';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private storage: Storage
+    private storage: Storage,
+    private renderer: Renderer2
   ) {
     this.initializeApp();
   }
@@ -31,7 +32,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+ async ngOnInit() {
+    // se status.darkmode = true aplica darktheme se nao aplica light theme
+    const status = await JSON.parse(this.getConfDarkmode());
+    status.darkmode ? this.renderer.setAttribute(document.body, 'color-theme', 'dark')
+    : this.renderer.setAttribute(document.body, 'color-theme', 'light');
   }
 
+// retorno um objeto {darkmode: true} ou {darkmode: false}
+private getConfDarkmode(): any {
+    return localStorage.getItem('darkmode');
+  }
 }
