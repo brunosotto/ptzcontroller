@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="br.com.sotto.ptzcontroller" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ptz Controller</name>
     <description>Ptz Controller - Controle sua câmera</description>
     <author email="bruno@sotto.com.br" href="https://sotto.com.br">Ionic Framework Team</author>

@@ -83,11 +83,11 @@ export class AddcameraComponent implements OnInit {
     this.form.setValue(cam);
   }
 
-  public async deleteCam(id: number, confirm?: boolean): Promise<void> {
+  public async deleteCam(cam: ICamera, confirm?: boolean): Promise<void> {
     if (!confirm) {
       this.overlayService.alert({
         header: 'PTZ Controle',
-        message: `Deseja deletar Câmera ${id} ?`,
+        message: `Deseja deletar Câmera ${cam.name} ?`,
         buttons: [
           {
             text: 'Não',
@@ -97,7 +97,7 @@ export class AddcameraComponent implements OnInit {
             text: 'Sim',
             role: 'confirm',
             handler: () => {
-              this.deleteCam(id, true);
+              this.deleteCam(cam, true);
             }
           }
         ]
@@ -107,7 +107,7 @@ export class AddcameraComponent implements OnInit {
     }
 
     const load = await this.showLoad();
-    this.camerasService.deleteCamera(id).then(_ => {
+    this.camerasService.deleteCamera(cam.id).then(_ => {
       this.overlayService.toast({ message: 'Deletado com sucesso!' });
       this.reloadList$.next();
       load.dismiss();

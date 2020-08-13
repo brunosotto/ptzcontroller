@@ -121,10 +121,11 @@ export class HomePage implements OnInit {
       return;
     }
 
+    this.vibrationStart(100);
     this.startTime = new Date().getTime();
     this.pointeTimeout = setTimeout(() => {
       // vibrar
-      this.vibrationStart(1000);
+      this.vibrationStart(50, 3);
     }, 1000);
   }
 
@@ -166,7 +167,6 @@ export class HomePage implements OnInit {
   }
 
   private presetShortPress(preset: number): void {
-    this.vibrationStart(100);
     this.apiCamService
       .gotoPreset(this.selectedCamera, preset)
       .toPromise()
@@ -176,7 +176,6 @@ export class HomePage implements OnInit {
   }
 
   private savePreset(preset: number): void {
-    this.vibrationStart(1000);
     this.apiCamService
       .savePreset(this.selectedCamera, preset)
       .toPromise()
@@ -185,8 +184,14 @@ export class HomePage implements OnInit {
       });
   }
 
-  private vibrationStart(time?: number): void {
+  private vibrationStart(time?: number, repeat?: number): void {
     this.vibration.vibrate(time);
+
+    if (repeat && repeat > 0) {
+      setTimeout(_ => {
+        this.vibrationStart(time, --repeat);
+      }, time * 2);
+    }
   }
 
 }
