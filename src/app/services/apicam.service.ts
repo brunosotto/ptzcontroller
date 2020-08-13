@@ -94,10 +94,10 @@ export class ApicamService {
       const params = {
          cmd: 'setimageattr',
          '-image_type': '1',
-         '-targety': image.targety && String(image.targety),
-         '-brightness': image.brightness && String(image.brightness),
-         '-saturation': image.saturation && String(image.saturation),
-         '-contrast': image.contrast && String(image.contrast),
+         '-targety': String(image.targety),
+         '-brightness': String(image.brightness),
+         '-saturation': String(image.saturation),
+         '-contrast': String(image.contrast),
       };
       return this.request(cam, url, params);
    }

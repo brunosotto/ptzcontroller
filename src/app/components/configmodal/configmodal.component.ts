@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IImageConfig } from 'src/app/models/image.model';
 import { ApicamService } from 'src/app/services/apicam.service';
-import { Observable } from 'rxjs';
-import { map, debounceTime, distinct } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, debounceTime, distinct, distinctUntilChanged } from 'rxjs/operators';
 import { ICamera } from 'src/app/models/camera.model';
 
 @Component({
@@ -39,16 +39,16 @@ export class ConfigmodalComponent implements OnInit {
 
   private initForm() {
     this.form = this.fb.group({
-      brightness: null,
-      contrast: null,
-      saturation: null,
-      targety: null,
+      brightness: [null, [Validators.required, Validators.pattern('[0-9]*'), Validators.min(0), Validators.max(100)]],
+      contrast: [null, [Validators.required, Validators.pattern('[0-9]*'), Validators.min(0), Validators.max(100)]],
+      saturation: [null, [Validators.required, Validators.pattern('[0-9]*'), Validators.min(0), Validators.max(255)]],
+      targety: [null, [Validators.required, Validators.pattern('[0-9]*'), Validators.min(0), Validators.max(255)]],
     });
 
     this.form.valueChanges
       .pipe(
         debounceTime(400),
-        distinct(),
+        distinct(v => JSON.stringify(v)),
       )
       .subscribe((conf: IImageConfig) => {
         this.form.setValue(conf);
@@ -74,6 +74,10 @@ export class ConfigmodalComponent implements OnInit {
   }
 
   private submit(): Observable<boolean> {
+    if (this.form.invalid) {
+      return of();
+    }
+
     // envia configurações
     const config = this.form.value as IImageConfig;
     return this.apiCamService.setImageConfig(this.camera, config)
