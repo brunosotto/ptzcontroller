@@ -78,9 +78,10 @@ export class ApicamService {
                const keys = ['brightness', 'saturation', 'contrast', 'targety'];
                const config: IImageConfig = response.data
                   .split(/\n/g).map(v => {
+                     const value = v.match(/"(?:[^"\\]|\\.)*"/);
                      return {
                         key: v.split('var ').pop().split('=').shift().trim(),
-                        value: v.match(/"(?:[^"\\]|\\.)*"/).shift().replace(/\"/g, '').trim(),
+                        value: value && value.shift().replace(/\"/g, '').trim() || '',
                      };
                   })
                   .filter(v => !!keys.find(k => k === v.key))

@@ -32,10 +32,6 @@ export class HomePage implements OnInit {
     { number: 4 },
     { number: 5 },
     { number: 6 },
-    { number: 7 },
-    { number: 8 },
-    { number: 9 },
-    { number: 10 },
   ];
   public cams: Array<ICamera>;
   public notfoundcam = 'Por favor adicione uma câmera.';
