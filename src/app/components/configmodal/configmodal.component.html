@@ -19,49 +19,45 @@
 <ion-content>
   <ion-list>
 
-    <form [formGroup]="form" (ngSubmit)="apply()">
+    <form [formGroup]="form">
 
       <ion-item class="ion-padding-vertical">
-        <ion-range min="0" max="100" color="danger" pin="true" formControlName="brightness"
-          (ionChange)="rangerBright($event)" [value]="dataSettings.brightness">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="brightness">
           <ion-label slot="start">Brilho </ion-label>
           <ion-icon size="small" slot="start" name="sunny"></ion-icon>
           <ion-icon slot="end" name="sunny"></ion-icon>
         </ion-range>
-        <ion-input class="inputs" type="number" [value]="dataSettings.brightness || dataSettingsDefaut.brightness">
+        <ion-input class="inputs" type="number" formControlName="brightness">
         </ion-input>
       </ion-item>
 
       <ion-item class="ion-padding-vertical">
-        <ion-range min="0" max="255" color="danger" pin="true" formControlName="saturation"
-          (ionChange)="rangeSaturation($event)" [value]="dataSettings.saturation || dataSettingsDefaut.saturation">
+        <ion-range min="0" max="255" color="danger" pin="true" formControlName="saturation">
           <ion-label slot="start">Saturação </ion-label>
-          <ion-icon size="small" slot="start" name="sunny"></ion-icon>
-          <ion-icon slot="end" name="sunny"></ion-icon>
+          <ion-icon class="rotate" size="small" slot="start" name="contrast"></ion-icon>
+          <ion-icon class="rotate" slot="end" name="contrast"></ion-icon>
         </ion-range>
-        <ion-input class="inputs" type="number" [value]="dataSettings.saturation || dataSettingsDefaut.saturation">
+        <ion-input class="inputs" type="number" formControlName="saturation">
         </ion-input>
       </ion-item>
 
       <ion-item class="ion-padding-vertical">
-        <ion-range min="0" max="100" color="danger" pin="true" formControlName="contrast"
-          (ionChange)="rangerContrast($event)" [value]="dataSettings.contrast || dataSettingsDefaut.contrast">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="contrast">
           <ion-label slot="start">Constraste </ion-label>
           <ion-icon size="small" slot="start" name="contrast"></ion-icon>
           <ion-icon slot="end" name="contrast"></ion-icon>
         </ion-range>
-        <ion-input class="inputs" type="number" [value]="dataSettings.contrast || dataSettingsDefaut.contrast">
+        <ion-input class="inputs" type="number" formControlName="contrast">
         </ion-input>
       </ion-item>
 
       <ion-item class="ion-padding-vertical">
-        <ion-range min="0" max="100" color="danger" pin="true" formControlName="exposure"
-          (ionChange)="rangerExposure($event)" [value]="dataSettings.exposure || dataSettingsDefaut.exposure">
+        <ion-range min="0" max="100" color="danger" pin="true" formControlName="targety">
           <ion-label slot="start">Exposição </ion-label>
           <ion-icon size="small" slot="start" name="aperture"></ion-icon>
           <ion-icon slot="end" name="aperture"></ion-icon>
         </ion-range>
-        <ion-input class="inputs" type="number" [value]="dataSettings.exposure || dataSettingsDefaut.exposure">
+        <ion-input class="inputs" type="number" formControlName="targety">
         </ion-input>
       </ion-item>
     </form>
@@ -73,19 +69,18 @@
     <ion-grid fixed>
       <ion-row>
         <ion-col size="4">
-          <ion-button (click)="closeModal()" color="medium" expand="block">
+          <ion-button (click)="cancel()" color="medium" expand="block">
             Cancelar
           </ion-button>
         </ion-col>
         <ion-col size="4">
-          <ion-button (click)="closeModalPassData()" type="submit" [disabled]="form.invalid" color="success"
-            expand="block">
-            Aplicar
+          <ion-button (click)="setDefault()" color="secondary" expand="block">
+            Redefinir
           </ion-button>
         </ion-col>
         <ion-col size="4">
-          <ion-button (click)="default()" color="secondary" expand="block">
-            Default
+          <ion-button (click)="closeModal()" color="success" expand="block">
+            Concluir
           </ion-button>
         </ion-col>
       </ion-row>

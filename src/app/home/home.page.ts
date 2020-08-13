@@ -70,7 +70,7 @@ export class HomePage implements OnInit {
     }
 
     this.vibrationStart(100);
-    this.apiCamService.action(this.selectedCamera, act);
+    this.apiCamService.action(this.selectedCamera, act).toPromise();
   }
 
   private errorSelectCamera(): void {
@@ -80,7 +80,7 @@ export class HomePage implements OnInit {
   public changeCam(ev: any) {
     // Selecionar Camera
     this.selectedCamera = ev.detail.value;
-    this.overlayService.toast({ message: `Câmera selecionada! IP: <strong> ${this.selectedCamera.name}</strong>` });
+    this.overlayService.toast({ message: `Câmera selecionada: <strong>${this.selectedCamera.name}</strong>` });
   }
 
   public async addCamera(): Promise<void> {
@@ -104,6 +104,9 @@ export class HomePage implements OnInit {
 
     const modal = await this.modalCtrl.create({
       component: ConfigmodalComponent,
+      componentProps: {
+        camera: this.selectedCamera
+      }
     });
     modal.present();
   }
@@ -147,7 +150,7 @@ export class HomePage implements OnInit {
   private async presetLongPress(preset: number): Promise<void> {
     const modal = await this.overlayService.alert({
       header: 'PTZ Controller',
-      message: `Deseja salvar Preset : ${preset}`,
+      message: `Deseja substituir o preset ${preset}?`,
       backdropDismiss: false,
       buttons: [
         {
