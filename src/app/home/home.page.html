@@ -1,10 +1,6 @@
 <ion-header class="ion-no-border ion-no-padding">
   <ion-toolbar class="ion-no-padding">
 
-    <ion-buttons slot="start">
-      <ion-menu-button auto-hide="false"></ion-menu-button>
-    </ion-buttons>
-
     <ion-title class="ion-text-center">
       <div class="title">PTZ <strong>Controller</strong></div>
     </ion-title>
@@ -39,7 +35,7 @@
           </ng-container>
 
           <ng-template #ionSelect>
-            <ion-select style="border-radius: 14px;  border: solid 1px #cdcdcd;" (ionChange)="changeCam($event)" placeholder="Selecione a Câmera">
+            <ion-select class="ionselect" (ionChange)="changeCam($event)" placeholder="Selecione a Câmera">
               <ion-select-option color="primary" *ngFor="let cam of cams" [value]="cam"> {{ cam.name}} </ion-select-option>
             </ion-select>
           </ng-template>
@@ -77,10 +73,7 @@
       <!-- Fim Columa Controles Arrows -->
       <!-- /////// -->
       <!-- Coluna Zoom e Focus -->
-      <ion-col  size-md="4" size-lg="4" size-xl="12" style="position: relative;
-        display: flex;
-        justify-content: center;
-        padding: 5px !important;">
+      <ion-col class="colpresets"  size-md="4" size-lg="4" size-xl="12">
 
         <div class="controlCenter">
 
@@ -99,7 +92,6 @@
             </ion-list>
           </ion-card>
 
-
           <ion-card mode="ios" class="ion-no-padding">
             <ion-list >
               <ion-item lines="none" >
@@ -114,13 +106,9 @@
             </ion-list>
           </ion-card>
 
-
           <ion-card mode="ios" class="ion-no-padding">
             <ion-list>
-              <ion-item lines="none" >
-                 <!-- <ion-fab-button slot="start" (click)="openPopover()">
-                  <ion-icon name="contract-outline"></ion-icon>
-                </ion-fab-button>  -->
+              <ion-item lines="none" > 
                 <ion-label>Configuração</ion-label>
                 <ion-fab-button color="medium" slot="end" (click)="openConfig()">
                   <ion-icon name="options-outline"></ion-icon>
@@ -129,7 +117,6 @@
               </ion-item>
             </ion-list>
           </ion-card>
-
 
         </div>
       </ion-col>
@@ -143,8 +130,7 @@
         
             <ion-grid>
               <ion-row>
-                <ion-col *ngFor="let n of btnsPresets" size="6">
-                 
+                <ion-col *ngFor="let n of btnsPresets" size="6">                 
                   <ion-fab-button (touchstart)="presetStart()"
                     (touchend)="presetEnd(n.number)">
                     <span> {{ n.number}} </span>
@@ -154,7 +140,6 @@
             </ion-grid>
           </div>
         </div>
-
       </ion-col>
       <!-- Fim Presets -->
     </ion-row>

@@ -1,175 +1,187 @@
-import { ApicamService } from './../services/apicam.service';
-import { ICamera } from 'src/app/models/camera.model';
-import { CamerasService } from 'src/app/services/cameras.service';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
+// plugins nativos
+import { Vibration } from '@ionic-native/vibration/ngx';
+// Services
 import { OverlayService } from './../services/overlay.service';
+import { ApicamService } from './../services/apicam.service';
+import { CamerasService } from 'src/app/services/cameras.service';
+// Models
+import { ICamera } from 'src/app/models/camera.model';
+// Components
 import { ConfigmodalComponent } from './../components/configmodal/configmodal.component';
 import { PopoverComponent } from './../components/popover/popover.component';
 import { AddcameraComponent } from '../components/addcamera/addcamera.component';
+// Rxjs
 import { Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+	selector: 'app-home',
+	templateUrl: './home.page.html',
+	styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+	private reload$: Subject<void> = new Subject();
+	public selectedCamera: ICamera;
+	public btnsPresets: Array<any> = [
+		{ number: 1 },
+		{ number: 2 },
+		{ number: 3 },
+		{ number: 4 },
+		{ number: 5 },
+		{ number: 6 },
+		{ number: 7 },
+		{ number: 8 },
+		{ number: 9 },
+		{ number: 10 },
+	];
+	public cams: Array<ICamera>;
+	public notfoundcam = 'Por favor adicione uma câmera.';
+	public startTime: number;
+	public pointeTimeout;
 
-  private reload$: Subject<void> = new Subject();
-  public selectedCamera: ICamera;
-  public btnsPresets: Array<any> = [
-    { number: 1 },
-    { number: 2 },
-    { number: 3 },
-    { number: 4 },
-    { number: 5 },
-    { number: 6 },
-    { number: 7 },
-    { number: 8 },
-    { number: 9 },
-    { number: 10 },
+	constructor(
+		private modalCtrl: ModalController,
+		private overlayService: OverlayService,
+		private popoverCtrl: PopoverController,
+		private camerasService: CamerasService,
+		private apiCamService: ApicamService,
+		private vibration: Vibration
+	) {}
 
-  ];
-  public cams: Array<ICamera>;
-  public notfoundcam = 'Por favor adicione uma câmera.';
-  public startTime: number;
+	ngOnInit() {
+		this.reload$.pipe(startWith([])).subscribe((_) => {
+			this.camerasService.getAllCamera().then((res) => {
+				this.cams = res || [];
+			});
+		});
+	}
 
-  constructor(
-    private modalCtrl: ModalController,
-    private overlayService: OverlayService,
-    private popoverCtrl: PopoverController,
-    private camerasService: CamerasService,
-    private apiCamService: ApicamService,
-  ) { }
+	public action(act: string): void {
+		if (!this.selectedCamera) {
+			this.errorSelectCamera();
+			return;
+		}
+		// TODO: vibrar
+		this.vibrationStart(100);
+		this.apiCamService.action(this.selectedCamera, act).toPromise();
+	}
 
-  ngOnInit() {
-    this.reload$
-      .pipe(
-        startWith([])
-      )
-      .subscribe(_ => {
-        this.camerasService.getAllCamera().then((res) => {
-          this.cams = res || [];
-        });
-      });
-  }
+	private errorSelectCamera(): void {
+		this.overlayService.toast({ message: `Selecione uma câmera!` });
+	}
 
-  public action(act: string): void {
-    if (!this.selectedCamera) {
-      this.errorSelectCamera();
-      return;
-    }
+	public changeCam(ev: any) {
+		// Selecionar Camera
+		this.selectedCamera = ev.detail.value;
+		this.overlayService.toast({ message: `Câmera selecionada! IP: <strong> ${this.selectedCamera.name}</strong>` });
+	}
 
-    // TODO: vibrar
-    this.apiCamService.action(this.selectedCamera, act).toPromise();
-  }
+	public async addCamera(): Promise<void> {
+		const modal = await this.modalCtrl.create({
+			component: AddcameraComponent,
+			backdropDismiss: false,
+		});
 
-  private errorSelectCamera(): void {
-    this.overlayService.toast({ message: `Selecione uma câmera!` });
-  }
+		modal.onDidDismiss().then((_) => {
+			this.reload$.next();
+		});
 
-  public changeCam(ev: any) {
-    // Selecionar Camera
-    this.selectedCamera = ev.detail.value;
-    this.overlayService.toast({ message: `Câmera selecionada! IP: <strong> ${this.selectedCamera.name}</strong>` });
-  }
+		modal.present();
+	}
 
-  public async addCamera(): Promise<void> {
-    const modal = await this.modalCtrl.create({
-      component: AddcameraComponent,
-      backdropDismiss: false
-    });
+	public async openConfig(): Promise<void> {
+		if (!this.selectedCamera) {
+			this.errorSelectCamera();
+			return;
+		}
 
-    modal.onDidDismiss().then(_ => {
-      this.reload$.next();
-    });
+		const modal = await this.modalCtrl.create({
+			component: ConfigmodalComponent,
+		});
+		modal.present();
+	}
 
-    modal.present();
-  }
+	public async openPopover(): Promise<void> {
+		const popover = await this.popoverCtrl.create({
+			component: PopoverComponent,
+		});
+		popover.present();
+	}
 
-  public async openConfig(): Promise<void> {
-    if (!this.selectedCamera) {
-      this.errorSelectCamera();
-      return;
-    }
+	public presetStart(): void {
+		if (!this.selectedCamera) {
+			this.errorSelectCamera();
+			return;
+		}
+		this.startTime = new Date().getTime();
+		this.pointeTimeout = setTimeout(() => {
+			// vibrar
+			this.vibrationStart(1000);
+		}, 1000);
+	}
 
-    const modal = await this.modalCtrl.create({
-      component: ConfigmodalComponent
-    });
-    modal.present();
-  }
+	public presetEnd(preset: number): Promise<void> {
+		if (!this.selectedCamera) {
+			return;
+		}
 
-  public async openPopover(): Promise<void> {
-    const popover = await this.popoverCtrl.create({
-      component: PopoverComponent,
-    });
-    popover.present();
-  }
+		const calcTime = new Date().getTime() - this.startTime;
 
-  public presetStart(): void {
-    if (!this.selectedCamera) {
-      this.errorSelectCamera();
-      return;
-    }
+		if (calcTime >= 1000) {
+			this.presetLongPress(preset);
+		} else {
+			clearTimeout(this.pointeTimeout);
+			this.presetShortPress(preset);
+		}
+	}
 
-    this.startTime = new Date().getTime();
-    this.pointeTimeout = setTimeout(()=>{
-      // vibrar
-    }, 1000);
-  }
+	private async presetLongPress(preset: number): Promise<void> {
+		const modal = await this.overlayService.alert({
+			header: 'PTZ Controller',
+			message: `Deseja salvar Preset : ${preset}`,
+			backdropDismiss: false,
+			buttons: [
+				{
+					text: 'Não',
+					role: 'cancel',
+				},
+				{
+					text: 'Sim',
+					role: 'confirm',
+					handler: () => {
+						this.savePreset(preset);
+					},
+				},
+			],
+		});
+		return modal.present();
+	}
 
-  public presetEnd(preset: number): void {
-    if (!this.selectedCamera) {
-      return;
-    }
+	private presetShortPress(preset: number): void {
+		// TODO: vibrar
+		this.vibrationStart(100);
+		this.apiCamService
+			.gotoPreset(this.selectedCamera, preset)
+			.toPromise()
+			.then((_) => {
+				this.overlayService.toast({ message: `Preset <strong>${preset}</strong>` });
+			});
+	}
 
-    const calcTime = new Date().getTime() - this.startTime;
+	private savePreset(preset: number): void {
+		// TODO: vibrar
+		this.vibrationStart(1000);
+		this.apiCamService
+			.savePreset(this.selectedCamera, preset)
+			.toPromise()
+			.then((_) => {
+				this.overlayService.toast({ message: `Preset salvo! <strong>${preset}</strong>` });
+			});
+	}
 
-    if (calcTime >= 1000) {
-      this.presetLongPress(preset);
-    }
-    else {
-      clearTimeout(this.)
-      this.presetShortPress(preset);
-    }
-  }
-
-  private async presetLongPress(preset: number): Promise<void> {
-    const modal = await this.overlayService.alert({
-      header: 'PTZ Controller',
-      message: `Deseja salvar Preset : ${preset}`,
-      backdropDismiss: false,
-      buttons: [
-        {
-          text: 'Não',
-          role: 'cancel',
-        },
-        {
-          text: 'Sim',
-          role: 'confirm',
-          handler: () => {
-            this.savePreset(preset);
-          }
-        }
-      ]
-    });
-    return modal.present();
-  }
-
-  private presetShortPress(preset: number): void {
-    // TODO: vibrar
-    this.apiCamService.gotoPreset(this.selectedCamera, preset).toPromise().then(_ => {
-      this.overlayService.toast({ message: `Preset <strong>${preset}</strong>` });
-    });
-  }
-
-  private savePreset(preset: number): void {
-    // TODO: vibrar
-    this.apiCamService.savePreset(this.selectedCamera, preset).toPromise().then(_ => {
-      this.overlayService.toast({ message: `Preset salvo! <strong>${preset}</strong>` });
-    });
-  }
-
+	private vibrationStart(time?: number): void {
+		this.vibration.vibrate(time);
+	}
 }
