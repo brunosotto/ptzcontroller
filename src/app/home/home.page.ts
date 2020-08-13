@@ -63,7 +63,7 @@ export class HomePage implements OnInit {
     }
 
     // TODO: vibrar
-    this.apiCamService.action(this.selectedCamera, act).toPromise();
+    this.apiCamService.action(this.selectedCamera, act);
   }
 
   private errorSelectCamera(): void {
@@ -115,9 +115,9 @@ export class HomePage implements OnInit {
     }
 
     this.startTime = new Date().getTime();
-    this.pointeTimeout = setTimeout(()=>{
-      // vibrar
-    }, 1000);
+    // this.pointeTimeout = setTimeout(()=>{
+    //   // vibrar
+    // }, 1000);
   }
 
   public presetEnd(preset: number): void {
@@ -131,7 +131,7 @@ export class HomePage implements OnInit {
       this.presetLongPress(preset);
     }
     else {
-      clearTimeout(this.)
+      // clearTimeout(this.)
       this.presetShortPress(preset);
     }
   }

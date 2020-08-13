@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { HTTP } from '@ionic-native/http/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -39,9 +40,10 @@ import { environment } from '../environments/environment';
     SplashScreen,
     ScreenOrientation,
     HttpClient,
+    HTTP,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     // { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
