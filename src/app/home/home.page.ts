@@ -190,7 +190,7 @@ export class HomePage implements OnInit {
   private vibrationStart(time?: number, repeat?: number): void {
     this.vibration.vibrate(time);
 
-    if (repeat && repeat > 0) {
+    if (repeat && repeat > 1) {
       setTimeout(_ => {
         this.vibrationStart(time, --repeat);
       }, time * 2);

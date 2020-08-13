@@ -62,7 +62,6 @@ export class ConfigmodalComponent implements OnInit {
 
   public setDefault(): void {
     this.form.setValue(this.default);
-    this.submit().toPromise();
   }
 
   public cancel(): void {
@@ -75,7 +74,7 @@ export class ConfigmodalComponent implements OnInit {
 
   private submit(): Observable<boolean> {
     if (this.form.invalid) {
-      return of();
+      return of(false);
     }
 
     // envia configurações

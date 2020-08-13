@@ -25,12 +25,13 @@ export class ApicamService {
          try {
             this.http.get(url, params, headers).then(response => {
                subscriber.next(response);
+               subscriber.complete();
             });
          } catch (error) {
             console.error(error);
             subscriber.error(error);
+            subscriber.complete();
          }
-         subscriber.complete();
       });
    }
 
@@ -78,8 +79,8 @@ export class ApicamService {
                const config: IImageConfig = response.data
                   .split(/\n/g).map(v => {
                      return {
-                        key: v.split('var ').pop().split('=').shift(),
-                        value: v.match(/"(?:[^"\\]|\\.)*"/).shift().replace(/\"/g, ''),
+                        key: v.split('var ').pop().split('=').shift().trim(),
+                        value: v.match(/"(?:[^"\\]|\\.)*"/).shift().replace(/\"/g, '').trim(),
                      };
                   })
                   .filter(v => !!keys.find(k => k === v.key))
