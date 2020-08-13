@@ -1,6 +1,7 @@
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 import { NgModule } from '@angular/core';
-import { BrowserModule, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
 
@@ -26,7 +27,6 @@ import { environment } from '../environments/environment';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    // HammerModule,
     IonicStorageModule.forRoot({
       name: '__ptzdb',
       driverOrder: ['sqlite', 'indexeddb', 'websql', 'localstorage']
@@ -41,8 +41,8 @@ import { environment } from '../environments/environment';
     ScreenOrientation,
     HttpClient,
     HTTP,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    // { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig }
   ],
   bootstrap: [AppComponent]
 })

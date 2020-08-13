@@ -1,12 +1,18 @@
-import { ApicamService } from './../services/apicam.service';
-import { ICamera } from 'src/app/models/camera.model';
-import { CamerasService } from 'src/app/services/cameras.service';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
+// plugins nativos
+import { Vibration } from '@ionic-native/vibration/ngx';
+// Services
 import { OverlayService } from './../services/overlay.service';
+import { ApicamService } from './../services/apicam.service';
+import { CamerasService } from 'src/app/services/cameras.service';
+// Models
+import { ICamera } from 'src/app/models/camera.model';
+// Components
 import { ConfigmodalComponent } from './../components/configmodal/configmodal.component';
 import { PopoverComponent } from './../components/popover/popover.component';
 import { AddcameraComponent } from '../components/addcamera/addcamera.component';
+// Rxjs
 import { Subject } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
@@ -30,11 +36,11 @@ export class HomePage implements OnInit {
     { number: 8 },
     { number: 9 },
     { number: 10 },
-
   ];
   public cams: Array<ICamera>;
   public notfoundcam = 'Por favor adicione uma câmera.';
   public startTime: number;
+  public pointeTimeout;
 
   constructor(
     private modalCtrl: ModalController,
@@ -42,6 +48,7 @@ export class HomePage implements OnInit {
     private popoverCtrl: PopoverController,
     private camerasService: CamerasService,
     private apiCamService: ApicamService,
+    private vibration: Vibration,
   ) { }
 
   ngOnInit() {
@@ -62,7 +69,7 @@ export class HomePage implements OnInit {
       return;
     }
 
-    // TODO: vibrar
+    this.vibrationStart(100);
     this.apiCamService.action(this.selectedCamera, act);
   }
 
@@ -79,7 +86,7 @@ export class HomePage implements OnInit {
   public async addCamera(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: AddcameraComponent,
-      backdropDismiss: false
+      backdropDismiss: false,
     });
 
     modal.onDidDismiss().then(_ => {
@@ -96,7 +103,7 @@ export class HomePage implements OnInit {
     }
 
     const modal = await this.modalCtrl.create({
-      component: ConfigmodalComponent
+      component: ConfigmodalComponent,
     });
     modal.present();
   }
@@ -115,9 +122,10 @@ export class HomePage implements OnInit {
     }
 
     this.startTime = new Date().getTime();
-    // this.pointeTimeout = setTimeout(()=>{
-    //   // vibrar
-    // }, 1000);
+    this.pointeTimeout = setTimeout(() => {
+      // vibrar
+      this.vibrationStart(1000);
+    }, 1000);
   }
 
   public presetEnd(preset: number): void {
@@ -129,9 +137,8 @@ export class HomePage implements OnInit {
 
     if (calcTime >= 1000) {
       this.presetLongPress(preset);
-    }
-    else {
-      // clearTimeout(this.)
+    } else {
+      clearTimeout(this.pointeTimeout);
       this.presetShortPress(preset);
     }
   }
@@ -151,25 +158,35 @@ export class HomePage implements OnInit {
           role: 'confirm',
           handler: () => {
             this.savePreset(preset);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     return modal.present();
   }
 
   private presetShortPress(preset: number): void {
-    // TODO: vibrar
-    this.apiCamService.gotoPreset(this.selectedCamera, preset).toPromise().then(_ => {
-      this.overlayService.toast({ message: `Preset <strong>${preset}</strong>` });
-    });
+    this.vibrationStart(100);
+    this.apiCamService
+      .gotoPreset(this.selectedCamera, preset)
+      .toPromise()
+      .then(_ => {
+        this.overlayService.toast({ message: `Preset <strong>${preset}</strong>` });
+      });
   }
 
   private savePreset(preset: number): void {
-    // TODO: vibrar
-    this.apiCamService.savePreset(this.selectedCamera, preset).toPromise().then(_ => {
-      this.overlayService.toast({ message: `Preset salvo! <strong>${preset}</strong>` });
-    });
+    this.vibrationStart(1000);
+    this.apiCamService
+      .savePreset(this.selectedCamera, preset)
+      .toPromise()
+      .then(_ => {
+        this.overlayService.toast({ message: `Preset salvo! <strong>${preset}</strong>` });
+      });
+  }
+
+  private vibrationStart(time?: number): void {
+    this.vibration.vibrate(time);
   }
 
 }

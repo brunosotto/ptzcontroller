@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-
+import { environment } from './../../../environments/environment.prod';
 @Component({
   selector: 'app-popover',
   templateUrl: './popover.component.html',
@@ -9,18 +9,38 @@ export class PopoverComponent implements OnInit {
 
   constructor(private renderer: Renderer2) { }
 
-  ngOnInit() {}
+  public darkmode: boolean;
+  public versao = environment.appversion;
 
-onToogleColorChange(ev){
-    const target = ev.detail.checked;
-    console.log(target);
-    if ( target ){
+  async ngOnInit() {
+    // tslint:disable-next-line: prefer-const
+    let status = await JSON.parse(this.getConfDarkmode());
+    this.darkmode = status.darkmode;
+  }
 
+  public onToogleColorChange(ev): void {
+    if (ev.detail.checked) {
       this.renderer.setAttribute(document.body, 'color-theme', 'dark');
-      // document.body.setAttribute('color-theme', 'dark');
+      this.setDarkmode(ev.detail.checked);
     } else {
-       this.renderer.setAttribute(document.body, 'color-theme', 'light');
-      //  document.body.setAttribute('color-theme', 'light');
+      this.renderer.setAttribute(document.body, 'color-theme', 'light');
+      this.setDarkmode(ev.detail.checked);
     }
   }
+
+  private setDarkmode(darkmodetheme?: boolean): Promise<void> {
+    const setconfig = {
+      darkmode: false
+    };
+    if (darkmodetheme) {
+      setconfig.darkmode = darkmodetheme;
+    }
+    localStorage.setItem('darkmode', JSON.stringify(setconfig));
+    return;
+  }
+
+  private getConfDarkmode(): any {
+    return localStorage.getItem('darkmode');
+  }
+
 }
