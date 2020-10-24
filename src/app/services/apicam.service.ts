@@ -35,7 +35,17 @@ export class ApicamService {
       });
    }
 
-   public action(cam: ICamera, act: string): Observable<HTTPResponse> {
+   public action(cam: ICamera, act: string, reCall?: boolean): Observable<HTTPResponse> {
+      // no action stop chama novamente depois para evitar bug
+      if (!reCall && act === 'stop') {
+         setTimeout(_ => this.action(cam, act, true), 150);
+         setTimeout(_ => this.action(cam, act, true), 350);
+         setTimeout(_ => this.action(cam, act, true), 550);
+         setTimeout(_ => this.action(cam, act, true), 800);
+      }
+
+      console.log(act);
+
       const url = `http://${cam.ipaddress}/${this.apiCgiBase}/ptzctrl.cgi`;
       const params = {
          '-step': '0',
