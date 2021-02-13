@@ -1,9 +1,5 @@
-<ion-header>
-  <ion-toolbar>
-
-    <ion-buttons slot="start">
-      <ion-menu-button auto-hide="false"></ion-menu-button>
-    </ion-buttons>
+<ion-header class="ion-no-border ion-no-padding">
+  <ion-toolbar class="ion-no-padding">
 
     <ion-title class="ion-text-center">
       <div class="title">PTZ <strong>Controller</strong></div>
@@ -18,127 +14,125 @@
 
 </ion-header>
 
-<ion-content>
-
-
+<ion-content fullscreen="true">
 
   <ion-grid>
     <ion-row>
       <!-- Columa Controles Arrows -->
-      <ion-col size-xs="12" size-md="4"> 
-       
-      <div class="segment" style="position: absolute; top: 0;" >
-            <ion-segment value="" (ionChange)="segmentChangedCam($event)" class="ion-marging-vertical">
-              <ion-segment-button *ngFor="let cam of cams" [value]="cam.name">
+      <ion-col  size-md="4" size-lg="4" size-xl="12">
+
+        <div class="segment">
+          <ion-note color="danger" *ngIf="cams?.length <= 0">
+          {{ notfoundcam }}
+          </ion-note>
+
+          <ng-container *ngIf="cams?.length < 3; else ionSelect">
+            <ion-segment mode="ios" value="" (ionChange)="changeCam($event)" class="ion-marging-vertical">
+              <ion-segment-button *ngFor="let cam of cams" [value]="cam">
                 <ion-label>{{ cam.name }}</ion-label>
               </ion-segment-button>
             </ion-segment>
-          </div>
+          </ng-container>
 
-        <div class="controlLeft"> 
-        
-        <div class="btn-arrow-up">
-            <ion-fab-button (click)="movUp()">
+          <ng-template #ionSelect>
+            <ion-select class="ionselect" (ionChange)="changeCam($event)" placeholder="Selecione a Câmera">
+              <ion-select-option color="primary" *ngFor="let cam of cams" [value]="cam"> {{ cam.name}} </ion-select-option>
+            </ion-select>
+          </ng-template>
+        </div>
+
+        <div class="controlLeft">
+          <div class="btn-arrow-up">
+            <ion-fab-button (touchstart)="action('up')" (touchend)="action('stop')">
               <ion-icon name="arrow-up-outline"></ion-icon>
             </ion-fab-button>
           </div>
 
           <div class="btn-left-right">
             <div class="btn-arrow-left">
-              <ion-fab-button (click)="movLeft()">
+              <ion-fab-button (touchstart)="action('left')" (touchend)="action('stop')">
                 <ion-icon name="arrow-back-outline"></ion-icon>
               </ion-fab-button>
             </div>
 
             <div class="btn-arrow-right">
-              <ion-fab-button (click)="movRight()">
+              <ion-fab-button (touchstart)="action('right')" (touchend)="action('stop')">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </ion-fab-button>
             </div>
           </div>
 
           <div class="btn-arrow-down">
-            <ion-fab-button (click)="movDown()">
+            <ion-fab-button (touchstart)="action('down')" (touchend)="action('stop')">
               <ion-icon name="arrow-down-outline"></ion-icon>
             </ion-fab-button>
           </div>
         </div>
-        
+
       </ion-col>
       <!-- Fim Columa Controles Arrows -->
       <!-- /////// -->
       <!-- Coluna Zoom e Focus -->
-      <ion-col size-xs="12" size-md="4">
-
-        <!-- <div class="controlConfig">
-          <ion-fab-button color="danger" slot="start" (click)="openConfig()">
-            <ion-icon name="options-outline"></ion-icon>
-          </ion-fab-button>
-        </div> -->
+      <ion-col class="colpresets"  size-md="4" size-lg="4" size-xl="12">
 
         <div class="controlCenter">
- 
-            <ion-card>
-              <ion-list>
-              <ion-item lines="none" >
-                <ion-fab-button slot="start" (click)="zoommIn()">
-                  <ion-icon name="remove-circle-outline"></ion-icon>
-                </ion-fab-button>
-                <ion-label>Zoom</ion-label>
-                <ion-fab-button slot="end" (click)="zoomOut()">
+
+          <ion-card mode="ios"class="ion-no-padding">
+            <ion-list>
+              <ion-item lines="none"  >
+                <ion-fab-button slot="start" (touchstart)="action('zoomin')" (touchend)="action('stop')">
                   <ion-icon name="add-circle-outline"></ion-icon>
+                </ion-fab-button>
+                <ion-label> Zoom </ion-label>
+                <ion-fab-button slot="end" (touchstart)="action('zoomout')" (touchend)="action('stop')">
+                  <ion-icon name="remove-circle-outline"></ion-icon>
                 </ion-fab-button>
               </ion-item>
 
-              </ion-list>
-            </ion-card>
-         
- 
-            <ion-card>
-              <ion-list>
-              <ion-item lines="none">
-                <ion-fab-button slot="start" (click)="focusOpen()">
+            </ion-list>
+          </ion-card>
+
+          <ion-card mode="ios" class="ion-no-padding">
+            <ion-list >
+              <ion-item lines="none" >
+                <ion-fab-button slot="start" (touchstart)="action('focusin')" (touchend)="action('stop')">
                   <ion-icon name="contract-outline"></ion-icon>
                 </ion-fab-button>
                 <ion-label>Focus</ion-label>
-                <ion-fab-button slot="end" (click)="focusClose()">
+                <ion-fab-button slot="end" (touchstart)="action('focusout')" (touchend)="action('stop')">
                   <ion-icon name="expand-outline"></ion-icon>
                 </ion-fab-button>
               </ion-item>
-              </ion-list>
-            </ion-card>
-           
- 
-            <ion-card>
-             <ion-list>
-              <ion-item lines="none">
-                <!-- <ion-fab-button slot="start" (click)="focusOpen()">
-                  <ion-icon name="contract-outline"></ion-icon>
-                </ion-fab-button> -->
-                <ion-label>Configuração</ion-label>
+            </ion-list>
+          </ion-card>
+
+          <ion-card mode="ios" class="ion-no-padding">
+            <ion-list>
+              <ion-item lines="none" > 
+                <ion-label>Imagem</ion-label>
                 <ion-fab-button color="medium" slot="end" (click)="openConfig()">
                   <ion-icon name="options-outline"></ion-icon>
                 </ion-fab-button>
 
               </ion-item>
-             </ion-list>
-            </ion-card>
-         
+            </ion-list>
+          </ion-card>
 
         </div>
       </ion-col>
       <!-- Fim Coluna Zoom e Focus -->
       <!-- ////// -->
       <!-- Columa Presets -->
-      <ion-col size-xs="12" size-md="4" class="">
-
-
+      <ion-col  size-md="4" size-lg="4" size-xl="12" >
+        <div class="prest-titulo"> <ion-note>  Presets </ion-note> </div>
         <div class="controlRight">
           <div class="btns-presets">
+        
             <ion-grid>
               <ion-row>
-                <ion-col *ngFor="let n of btnsPresets" size="6">
-                  <ion-fab-button (press)="pressEvent($event, n.number)" (click)="presetBtn(n.number)">
+                <ion-col *ngFor="let n of btnsPresets" size="6">                 
+                  <ion-fab-button (touchstart)="presetStart()"
+                    (touchend)="presetEnd(n.number)">
                     <span> {{ n.number}} </span>
                   </ion-fab-button>
                 </ion-col>
@@ -146,16 +140,15 @@
             </ion-grid>
           </div>
         </div>
-
       </ion-col>
       <!-- Fim Presets -->
     </ion-row>
   </ion-grid>
 
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button (click)="addCamera()">
-          <ion-icon name="add"></ion-icon>
-     </ion-fab-button>
+    <ion-fab-button  size="small" (click)="addCamera()">
+      <ion-icon name="videocam-outline"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
 
 </ion-content>

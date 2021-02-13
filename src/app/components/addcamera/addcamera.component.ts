@@ -1,10 +1,11 @@
+import { OverlayService } from './../../services/overlay.service';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { CamerasService } from 'src/app/services/cameras.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
- 
-
 import { ICamera } from 'src/app/models/camera.model';
+import { Subject } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addcamera',
@@ -13,44 +14,108 @@ import { ICamera } from 'src/app/models/camera.model';
 })
 export class AddcameraComponent implements OnInit {
 
-public form: FormGroup;
-
- public cams: ICamera[];
+  private reloadList$: Subject<void> = new Subject();
+  public form: FormGroup;
+  public cams: ICamera[];
 
   constructor(
     private modalCtrl: ModalController,
     private camerasService: CamerasService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private overlayService: OverlayService) { }
 
   ngOnInit() {
     this.initForm();
-    this.camerasService.getAllCamera().then((res: ICamera[]) => this.cams = res);
-     
+
+    this.reloadList$
+      .pipe(
+        startWith([])
+      )
+      .subscribe(_ => {
+        this.camerasService.getAllCamera().then((res) => {
+          this.cams = res || [];
+        });
+      });
   }
 
-  initForm(): void {
-    const id =  Math.floor(100 + Math.random() * 900);
+  private initForm(): void {
     this.form = this.fb.group({
-      id:  [id],
-      name: ['', Validators.required],
-      ipaddress: ['', Validators.required],
-      description: ['']
+      id: null,
+      name: [null, Validators.required],
+      ipaddress: [null, Validators.required],
+      user: [null, Validators.required],
+      password: [null, Validators.required],
+      description: null
     });
   }
 
-  add(){
-    try {
-      console.log(this.form.value);
-      const data = this.form.value;
-      this.camerasService.addCamera(data);
-    } catch (error) {
-      console.log('ERrroroororor' , error);
-    }
-   }
+  private get id(): number {
+    return new Date().getTime();
+  }
 
-  
-  closeModal(){
-    return this.modalCtrl.dismiss();
+  private showLoad(): Promise<HTMLIonLoadingElement> {
+    return this.overlayService.loading({ message: 'Aguarde...' });
+  }
+
+  public async submit(): Promise<void> {
+    const id = this.form.get('id').value;
+    const load = await this.showLoad();
+    const cam = this.form.value as ICamera;
+
+    if (!id) {
+      cam.id = this.id;
+      this.camerasService.addCamera(cam).then(() => {
+        this.overlayService.toast({ message: `${cam.name}  Adicionada com sucesso!` });
+        this.reloadList$.next();
+        load.dismiss();
+      });
+    } else {
+      this.camerasService.updateCamera(cam).then(() => {
+        this.overlayService.toast({ message: `${cam.name}  Atualizado com sucesso!` });
+        this.reloadList$.next();
+        load.dismiss();
+      });
+    }
+    this.form.reset();
+  }
+
+  public editCam(cam: ICamera): void {
+    this.form.setValue(cam);
+  }
+
+  public async deleteCam(cam: ICamera, confirm?: boolean): Promise<void> {
+    if (!confirm) {
+      this.overlayService.alert({
+        header: 'PTZ Controle',
+        message: `Deseja deletar Câmera ${cam.name} ?`,
+        buttons: [
+          {
+            text: 'Não',
+            role: 'cancel'
+          },
+          {
+            text: 'Sim',
+            role: 'confirm',
+            handler: () => {
+              this.deleteCam(cam, true);
+            }
+          }
+        ]
+      });
+
+      return;
+    }
+
+    const load = await this.showLoad();
+    this.camerasService.deleteCamera(cam.id).then(_ => {
+      this.overlayService.toast({ message: 'Deletado com sucesso!' });
+      this.reloadList$.next();
+      load.dismiss();
+    });
+  }
+
+  public closeModal(): void {
+    this.modalCtrl.dismiss();
   }
 
 }

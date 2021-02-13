@@ -1,9 +1,8 @@
-import { OverlayService } from './overlay.service';
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ICamera } from './../models/camera.model';
 
+const CAMERA_STORAGE = 'cameras';
 
 @Injectable({
   providedIn: 'root'
@@ -12,54 +11,32 @@ export class CamerasService {
 
   public cameras: ICamera[] = [];
 
+  constructor(
+    private storage: Storage,
+  ) {
 
-  constructor(private storage: Storage, private overlayService: OverlayService) { }
+  }
 
-   async addCamera(camera: ICamera)  { 
-      let exist  = false;
-      const load = await this.overlayService.loading({message: 'Aguarde...'});
-      for ( const cam of this.cameras ){
-        if ( cam.id === camera.id ) {
-          exist = true;
-        }
-      }
+  public addCamera(camera: ICamera): Promise<void> {
+    this.cameras.push(camera);
+    return this.storage.set(CAMERA_STORAGE, this.cameras);
+  }
 
-      if ( exist ) {
-        this.cameras = this.cameras.filter( cam => cam.id !== camera.id);
-      } else {
-        this.cameras.push( camera );
-      }
-      load.dismiss();
-      this.storage.set('cameras', this.cameras);
-      this.overlayService.toast({ message: 'Adicionado com sucesso.'});
-      return !exist;
+  public async getAllCamera() {
+    const cams = await this.storage.get(CAMERA_STORAGE);
+    this.cameras = cams || [];
+    return this.cameras;
+  }
 
-   }
+  public updateCamera(cam: ICamera): Promise<ICamera> {
+    // substitui a camera
+    this.cameras = this.cameras.map(c => c.id === cam.id ? cam : c);
+    return this.storage.set(CAMERA_STORAGE, this.cameras);
+  }
 
-    async getAllCamera()  {
-         const cams = await this.storage.get('cameras');
-         this.cameras = cams || [];
-         return this.cameras;
-    }
-
-
-
-   async getCamera( id ) {
-     await this.getAllCamera();
-     const exist = this.cameras.find( cam => cam.id === id);
-     return ( exist ) ? true : false;
-   }
-
-
-   async updateCamera(id){
-     await this.getAllCamera();
-     const exist = this.cameras.find( cam => cam.id === id);
-     return ( exist ) ? true : false;
-   }
-
-   deleteCamera(id) {
-     const ArrayCam = this.cameras.filter(res =>  res.id !== id  );
-     this.storage.set('cameras', ArrayCam);
-   }
+  public deleteCamera(id: number): Promise<void> {
+    const cams = this.cameras.filter(cam => cam.id !== id);
+    return this.storage.set(CAMERA_STORAGE, cams);
+  }
 
 }
